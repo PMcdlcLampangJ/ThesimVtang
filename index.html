@@ -3,67 +3,102 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>เดอะซิมส์ ภาคพิสดาร ตางค์</title>
+  <title>เดอะซิมส์ ภาคพิสดาร ตางค์ - เวอร์ชั่น 4</title>
   <style>
     :root {
       --primary: #2e7d32;
       --primary-light: #4caf50;
       --accent: #ff8f00;
-      --bg: #eef7ee;
+      --bg: #e8f5e9;
       --card: #ffffff;
       --soil-dry: #a1887f;
       --soil-wet: #5d4037;
+      --wood-light: #d7ccc8;
+      --wood-border: #6d4c41;
       --text: #263238;
     }
     * { box-sizing: border-box; font-family: 'Sarabun', 'Segoe UI', sans-serif; }
-    body { margin: 0; background: var(--bg); color: var(--text); }
-    
-    /* หน้าจอ Login / Title Screen */
+    body {
+      margin: 0;
+      background: radial-gradient(circle at top, #f1f8e9 0%, #dcedc8 100%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* =========================================
+       1. หน้าจอ Login / Title Screen (ขยายใหญ่สดใส)
+       ========================================= */
     #login-screen {
       position: fixed; inset: 0;
-      background: linear-gradient(180deg, #4fc3f7 0%, #81c784 55%, #388e3c 100%);
+      background: linear-gradient(180deg, #29b6f6 0%, #81d4fa 42%, #81c784 72%, #2e7d32 100%);
       display: flex; align-items: center; justify-content: center;
       z-index: 100; padding: 14px; overflow-y: auto;
     }
     .login-box {
-      background: rgba(255, 255, 255, 0.97); padding: 20px 24px 24px;
-      border-radius: 20px; max-width: 500px; width: 100%;
-      box-shadow: 0 14px 35px rgba(0,0,0,0.3); text-align: center;
-      border: 4px solid #fbc02d; margin: auto;
+      background: rgba(255, 255, 255, 0.98);
+      padding: 22px 26px 26px;
+      border-radius: 24px;
+      max-width: 580px;
+      width: 100%;
+      box-shadow: 0 18px 45px rgba(0,0,0,0.32);
+      text-align: center;
+      border: 5px solid #fbc02d;
+      margin: auto;
+      position: relative;
     }
     .game-title {
-      margin: 4px 0 2px; font-size: 1.7rem; font-weight: 900;
+      margin: 2px 0 4px; font-size: 1.9rem; font-weight: 900;
       color: #1b5e20; text-shadow: 2px 2px 0px #fff59d;
-      line-height: 1.2;
+      line-height: 1.2; letter-spacing: -0.5px;
     }
     .game-subtitle {
-      display: inline-block; background: #ff6f00; color: white;
-      font-size: 0.8rem; font-weight: bold; padding: 2px 12px;
-      border-radius: 20px; margin-bottom: 10px;
+      display: inline-block; background: linear-gradient(90deg, #ff6f00, #e65100);
+      color: white; font-size: 0.85rem; font-weight: bold; padding: 4px 16px;
+      border-radius: 20px; margin-bottom: 12px;
+      box-shadow: 0 3px 8px rgba(230, 81, 0, 0.3);
     }
 
-    /* ฉากประกอบหน้าแรก (SVG Scene) */
+    /* ฉากประกอบหน้าแรก (SVG Scene ขนาดใหญ่เต็มตา) */
     .hero-scene {
-      width: 100%; max-height: 170px; border-radius: 14px;
-      overflow: hidden; border: 3px solid #8bc34a;
-      margin-bottom: 14px; background: #b3e5fc;
-      box-shadow: inset 0 0 12px rgba(0,0,0,0.1);
+      width: 100%;
+      height: 250px;
+      border-radius: 18px;
+      overflow: hidden;
+      border: 4px solid #7cb342;
+      margin-bottom: 16px;
+      background: #b3e5fc;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.15), inset 0 0 15px rgba(255,255,255,0.4);
     }
-    @keyframes bounceFunny {
+    @keyframes bounceHero {
       0%, 100% { transform: translateY(0px) rotate(0deg); }
-      50% { transform: translateY(-5px) rotate(-1.5deg); }
+      50% { transform: translateY(-6px) rotate(-1deg); }
     }
-    @keyframes cheerCrowd {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-4px); }
+    @keyframes cheerTeamLeft {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(1.5deg); }
     }
-    .funny-hero { animation: bounceFunny 1.8s infinite ease-in-out; transform-origin: center bottom; }
-    .crowd-anim { animation: cheerCrowd 1.2s infinite ease-in-out; }
+    @keyframes cheerTeamRight {
+      0%, 100% { transform: translateY(-2px) rotate(0deg); }
+      50% { transform: translateY(4px) rotate(-1.5deg); }
+    }
+    @keyframes floatCloud {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(12px); }
+    }
+    @keyframes spinSun {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .funny-hero { animation: bounceHero 2s infinite ease-in-out; transform-origin: center bottom; }
+    .team-left { animation: cheerTeamLeft 1.6s infinite ease-in-out; transform-origin: center bottom; }
+    .team-right { animation: cheerTeamRight 1.8s infinite ease-in-out; transform-origin: center bottom; }
+    .cloud-move { animation: floatCloud 5s infinite ease-in-out; }
+    .sun-rays { animation: spinSun 25s linear infinite; transform-origin: 485px 38px; }
 
     /* แท็บสลับ สร้างใหม่ / โหลดเซฟเดิม */
     .auth-tabs {
       display: flex; background: #eceff1; border-radius: 12px; padding: 4px;
-      margin-bottom: 14px; gap: 4px;
+      margin-bottom: 14px; gap: 6px;
     }
     .auth-tab {
       flex: 1; padding: 10px 8px; border: none; border-radius: 9px;
@@ -72,134 +107,302 @@
     }
     .auth-tab.active {
       background: white; color: var(--primary);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     }
 
     .gender-select { display: flex; gap: 10px; margin: 8px 0 14px; }
     .gender-card {
-      flex: 1; border: 2px solid #cfd8dc; border-radius: 12px; padding: 8px; cursor: pointer;
+      flex: 1; border: 2px solid #cfd8dc; border-radius: 12px; padding: 10px; cursor: pointer;
       transition: 0.2s; background: #fafafa;
     }
-    .gender-card.active { border-color: var(--primary); background: #e8f5e9; transform: scale(1.03); }
-    .gender-card .avatar { font-size: 2.2rem; display: block; }
+    .gender-card.active { border-color: var(--primary); background: #e8f5e9; transform: scale(1.02); }
+    .gender-card .avatar { font-size: 2.3rem; display: block; }
     input[type="text"] {
       width: 100%; padding: 10px 12px; margin: 4px 0 10px; border: 1.5px solid #b0bec5;
-      border-radius: 8px; font-size: 0.95rem;
+      border-radius: 10px; font-size: 0.95rem; transition: border-color 0.2s;
     }
-    .btn {
-      border: none; border-radius: 8px; padding: 10px 14px; font-size: 0.9rem;
-      font-weight: bold; cursor: pointer; transition: 0.15s;
-    }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-    .btn-primary { background: var(--primary); color: white; width: 100%; font-size: 1.05rem; }
-    .btn-primary:hover:not(:disabled) { background: #1b5e20; }
-    .btn-load { background: #0277bd; color: white; width: 100%; font-size: 1.05rem; }
-    .btn-load:hover:not(:disabled) { background: #01579b; }
-    .btn-secondary { background: #0277bd; color: white; }
-    .btn-warning { background: var(--accent); color: white; }
-    .btn-forest { background: #00695c; color: white; }
-    .btn-forest:hover:not(:disabled) { background: #004d40; }
+    input[type="text"]:focus { outline: none; border-color: var(--primary); }
 
-    /* โครงสร้างหลักของเกม */
-    #game-container { max-width: 1140px; margin: 0 auto; padding: 12px; display: none; }
-    .top-banner {
-      background: linear-gradient(90deg, #1b5e20, #388e3c); color: white;
-      padding: 8px 16px; border-radius: 12px; margin-bottom: 10px;
-      display: flex; justify-content: space-between; align-items: center;
-      font-weight: bold; box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+    .btn {
+      border: none; border-radius: 10px; padding: 10px 14px; font-size: 0.9rem;
+      font-weight: bold; cursor: pointer; transition: 0.15s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     }
-    
+    .btn:active:not(:disabled) { transform: translateY(1px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-primary { background: linear-gradient(180deg, #43a047, #2e7d32); color: white; width: 100%; font-size: 1.05rem; }
+    .btn-primary:hover:not(:disabled) { background: linear-gradient(180deg, #2e7d32, #1b5e20); }
+    .btn-load { background: linear-gradient(180deg, #039be5, #0277bd); color: white; width: 100%; font-size: 1.05rem; }
+    .btn-load:hover:not(:disabled) { background: linear-gradient(180deg, #0277bd, #01579b); }
+    .btn-secondary { background: #0277bd; color: white; }
+    .btn-warning { background: linear-gradient(180deg, #ffa000, #ff6f00); color: white; }
+    .btn-warning:hover:not(:disabled) { filter: brightness(1.06); }
+    .btn-forest { background: linear-gradient(180deg, #00897b, #00695c); color: white; }
+    .btn-forest:hover:not(:disabled) { filter: brightness(1.08); }
+
+    /* =========================================
+       2. โครงสร้างหลักของเกม
+       ========================================= */
+    #game-container { max-width: 1180px; margin: 0 auto; padding: 12px; display: none; }
+    .top-banner {
+      background: linear-gradient(90deg, #1b5e20, #388e3c, #2e7d32); color: white;
+      padding: 10px 18px; border-radius: 14px; margin-bottom: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.14);
+      border-bottom: 3px solid #fbc02d;
+    }
+
     /* แถบสถานะด้านบน */
     .hud {
-      background: var(--card); border-radius: 14px; padding: 14px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08); display: flex; flex-wrap: wrap;
+      background: var(--card); border-radius: 16px; padding: 14px 16px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08); display: flex; flex-wrap: wrap;
       align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px;
+      border: 2px solid #c8e6c9;
     }
     .player-profile { display: flex; align-items: center; gap: 12px; }
     .player-avatar {
-      width: 60px; height: 60px; border-radius: 50%; background: #e8f5e9;
-      display: flex; align-items: center; justify-content: center; font-size: 2.3rem;
-      border: 2.5px solid var(--primary);
+      width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #e8f5e9, #fff9c4);
+      display: flex; align-items: center; justify-content: center; font-size: 2.4rem;
+      border: 3px solid var(--primary); box-shadow: 0 3px 8px rgba(0,0,0,0.12);
     }
-    .bars { width: 215px; }
+    .bars { width: 225px; }
     .bar-wrap { background: #eceff1; height: 10px; border-radius: 6px; overflow: hidden; margin-top: 3px; }
     .bar-fill { height: 100%; transition: width 0.3s; }
-    .exp-fill { background: #fbc02d; }
-    .stam-fill { background: #039be5; }
+    .exp-fill { background: linear-gradient(90deg, #fbc02d, #ff8f00); }
+    .stam-fill { background: linear-gradient(90deg, #29b6f6, #0288d1); }
     .regen-note {
-      font-size: 0.72rem; color: #0277bd; margin-top: 3px; font-weight: bold;
+      font-size: 0.73rem; color: #0277bd; margin-top: 3px; font-weight: bold;
     }
     .equip-badges {
-      display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap;
+      display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; max-width: 320px;
     }
     .eq-chip {
       background: #fff3e0; border: 1px solid #ffb74d; color: #e65100;
-      font-size: 0.72rem; padding: 2px 6px; border-radius: 6px; font-weight: bold;
+      font-size: 0.72rem; padding: 2px 7px; border-radius: 8px; font-weight: bold;
     }
 
     .stats-badges { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .badge {
-      background: #f1f8e9; border: 1px solid #c5e1a5; padding: 6px 12px;
+      background: #f1f8e9; border: 1.5px solid #aed581; padding: 7px 13px;
       border-radius: 20px; font-weight: bold; font-size: 0.9rem;
+      box-shadow: inset 0 1px 2px rgba(255,255,255,0.8);
     }
 
     /* พื้นที่เล่นเกม 2 คอลัมน์ */
     .main-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 14px; }
-    @media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
 
     .panel {
-      background: var(--card); border-radius: 14px; padding: 16px;
+      background: var(--card); border-radius: 16px; padding: 16px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.06); margin-bottom: 14px;
+      border: 1px solid #e0e0e0;
     }
-    .panel h3 { margin: 0 0 10px; color: var(--primary); border-bottom: 1px solid #eee; padding-bottom: 6px; }
+    .panel h3 { margin: 0 0 10px; color: var(--primary); border-bottom: 2px solid #f1f8e9; padding-bottom: 6px; }
 
     /* แถบเครื่องมือ */
-    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
     .tool-btn {
-      flex: 1; min-width: 100px; padding: 9px 6px; border: 2px solid #cfd8dc;
-      border-radius: 10px; background: white; cursor: pointer; font-weight: bold; text-align: center;
-      font-size: 0.85rem;
+      flex: 1; min-width: 105px; padding: 10px 6px; border: 2px solid #cfd8dc;
+      border-radius: 12px; background: white; cursor: pointer; font-weight: bold; text-align: center;
+      font-size: 0.85rem; transition: all 0.15s;
     }
-    .tool-btn.active { border-color: var(--accent); background: #fff8e1; transform: translateY(-2px); }
+    .tool-btn:hover { background: #f9fbe7; }
+    .tool-btn.active {
+      border-color: var(--accent); background: #fff8e1; transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(255, 143, 0, 0.22);
+    }
 
-    /* แปลงผัก */
-    .plots-wrapper { display: flex; flex-direction: column; gap: 16px; }
+    /* =========================================
+       3. กราฟิกแปลงผักแบบ Raised Garden Bed & รั้วไม้
+       ========================================= */
+    .plots-wrapper { display: flex; flex-direction: column; gap: 20px; }
     .plot-zone {
-      border: 2px dashed #a5d6a7; border-radius: 12px; padding: 12px; background: #f9fbe7;
+      position: relative;
+      border: 4px solid #795548;
+      border-radius: 16px;
+      padding: 14px;
+      background-color: #dcedc8;
+      background-image:
+        radial-gradient(#aed581 15%, transparent 16%),
+        radial-gradient(#c5e1a5 15%, transparent 16%);
+      background-size: 24px 24px;
+      background-position: 0 0, 12px 12px;
+      box-shadow: 0 6px 0 #5d4037, 0 10px 18px rgba(0,0,0,0.12);
     }
+    /* หัวเสารั้วไม้มุมแปลง */
+    .plot-zone::before, .plot-zone::after {
+      content: "";
+      position: absolute;
+      top: -8px;
+      width: 14px;
+      height: 14px;
+      background: #8d6e63;
+      border: 2px solid #4e342e;
+      border-radius: 4px;
+    }
+    .plot-zone::before { left: 10px; }
+    .plot-zone::after { right: 10px; }
+
     .plot-zone.locked {
-      background: #eceff1; border-color: #b0bec5; text-align: center; padding: 24px;
+      background: repeating-linear-gradient(
+        45deg,
+        #eceff1,
+        #eceff1 12px,
+        #e0e0e0 12px,
+        #e0e0e0 24px
+      );
+      border-color: #90a4ae;
+      box-shadow: 0 4px 0 #78909c;
+      text-align: center;
+      padding: 26px;
     }
-    .zone-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
-    .grid-3x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .zone-header {
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: bold; margin-bottom: 10px; font-size: 0.92rem;
+      background: #6d4c41; color: #fff8e1;
+      padding: 6px 12px; border-radius: 10px;
+      border: 2px solid #4e342e;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    .grid-3x3 {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      background: #8d6e63;
+      padding: 10px;
+      border-radius: 12px;
+      border: 3px solid #5d4037;
+      box-shadow: inset 0 3px 8px rgba(0,0,0,0.35);
+    }
+
+    @keyframes readyBounce {
+      0%, 100% { transform: scale(1) translateY(0); }
+      50% { transform: scale(1.06) translateY(-3px); }
+    }
+    @keyframes sparklePulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+    @keyframes popClick {
+      0% { transform: scale(0.92); }
+      60% { transform: scale(1.04); }
+      100% { transform: scale(1); }
+    }
+
     .cell {
-      aspect-ratio: 1 / 0.92; background: var(--soil-dry); border-radius: 10px;
-      color: white; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; cursor: pointer; padding: 6px; text-align: center;
-      position: relative; transition: 0.15s; user-select: none;
+      aspect-ratio: 1 / 0.95;
+      background-color: #9c786c;
+      /* ร่องดินไถพรวนแนวนอน */
+      background-image: repeating-linear-gradient(
+        0deg,
+        rgba(62, 39, 35, 0.25) 0px,
+        rgba(62, 39, 35, 0.25) 4px,
+        transparent 4px,
+        transparent 11px
+      );
+      border: 3px solid #6d4c41;
+      border-radius: 12px;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      padding: 6px;
+      text-align: center;
+      position: relative;
+      transition: transform 0.15s, filter 0.15s, background-color 0.3s;
+      user-select: none;
+      box-shadow: inset 0 3px 6px rgba(0,0,0,0.35), 0 2px 0 #4e342e;
     }
-    .cell:hover { filter: brightness(1.06); }
-    .cell.watered { background: var(--soil-wet); box-shadow: inset 0 0 0 2px #4fc3f7; }
-    .cell.ready { background: #388e3c; box-shadow: 0 0 10px rgba(76,175,80,0.6); }
-    .cell .crop-icon { font-size: 1.8rem; }
-    .cell .crop-name { font-size: 0.8rem; font-weight: bold; }
-    .cell .crop-status { font-size: 0.72rem; opacity: 0.9; }
+    .cell:hover {
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+    }
+    .cell:active {
+      animation: popClick 0.2s ease-out;
+    }
+    .cell.watered {
+      background-color: #4e342e;
+      border-color: #29b6f6;
+      box-shadow: inset 0 0 12px rgba(41, 182, 246, 0.45), 0 2px 0 #3e2723;
+    }
+    .cell.ready {
+      background-color: #5d4037;
+      border-color: #ffd54f;
+      box-shadow: 0 0 14px rgba(255, 213, 79, 0.85), inset 0 0 10px rgba(129, 199, 132, 0.5);
+    }
+    .cell.ready .crop-icon {
+      animation: readyBounce 1.2s infinite ease-in-out;
+    }
+    .sparkle-badge {
+      position: absolute;
+      top: 4px;
+      left: 5px;
+      font-size: 0.85rem;
+      animation: sparklePulse 1s infinite ease-in-out;
+    }
+    .water-drop-badge {
+      position: absolute;
+      bottom: 4px;
+      right: 5px;
+      font-size: 0.78rem;
+      filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+    }
     .fert-tag {
-      position: absolute; top: 4px; right: 4px; background: #ff6f00;
-      font-size: 0.65rem; padding: 1px 5px; border-radius: 6px;
+      position: absolute; top: 4px; right: 4px;
+      background: linear-gradient(135deg, #ff8f00, #e65100);
+      color: #fff; font-weight: bold;
+      font-size: 0.65rem; padding: 2px 6px; border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .cell .crop-icon {
+      font-size: 1.95rem;
+      line-height: 1.1;
+      filter: drop-shadow(0 3px 3px rgba(0,0,0,0.45));
+      margin-bottom: 2px;
+    }
+    .cell .crop-name {
+      font-size: 0.78rem;
+      font-weight: bold;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.85);
+      background: rgba(0,0,0,0.32);
+      padding: 1px 6px;
+      border-radius: 6px;
+    }
+    .cell .crop-status {
+      font-size: 0.69rem;
+      margin-top: 2px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.85);
+    }
+    .mini-progress {
+      width: 82%;
+      height: 5px;
+      background: rgba(0,0,0,0.45);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 3px;
+    }
+    .mini-progress-fill {
+      height: 100%;
+      background: #8bc34a;
+      transition: width 0.4s;
     }
 
     /* ร้านค้า & ตะกร้าขายของ */
     .shop-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
     .shop-tab-btn {
-      flex: 1; padding: 6px; border: 1.5px solid #cfd8dc; border-radius: 8px;
+      flex: 1; padding: 7px; border: 1.5px solid #cfd8dc; border-radius: 10px;
       background: #f5f5f5; font-weight: bold; cursor: pointer; font-size: 0.85rem;
     }
     .shop-tab-btn.active { background: #e8f5e9; border-color: var(--primary); color: var(--primary); }
 
+    .shop-scroll {
+      max-height: 310px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
     .shop-item, .inv-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; gap: 8px;
+      padding: 8px 4px; border-bottom: 1px solid #f0f0f0; font-size: 0.87rem; gap: 8px;
     }
     .quality-1 { color: #546e7a; }
     .quality-2 { color: #0277bd; font-weight: bold; }
@@ -211,11 +414,13 @@
     th, td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #eee; }
     th { background: #f1f8e9; color: var(--primary); }
     .toast {
-      position: fixed; bottom: 16px; right: 16px; background: #263238; color: white;
-      padding: 10px 18px; border-radius: 8px; font-size: 0.9rem; opacity: 0;
-      transition: opacity 0.3s; pointer-events: none; z-index: 200; max-width: 340px;
+      position: fixed; bottom: 18px; right: 18px; background: rgba(38, 50, 56, 0.96); color: white;
+      padding: 11px 18px; border-radius: 12px; font-size: 0.9rem; opacity: 0;
+      transition: opacity 0.3s, transform 0.3s; transform: translateY(10px);
+      pointer-events: none; z-index: 200; max-width: 360px;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.28); border-left: 4px solid #fbc02d;
     }
-    .toast.show { opacity: 1; }
+    .toast.show { opacity: 1; transform: translateY(0); }
   </style>
 </head>
 <body>
@@ -224,111 +429,217 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="game-title">🏡 เดอะซิมส์ ภาคพิสดาร ตางค์</div>
-    <div class="game-subtitle">🔥 โหมดชีวิตจริงสุดโหด: ผักโตช้า • หาของป่า • ไอเทมลับ 🔥</div>
+    <div class="game-subtitle">🔥 เวอร์ชั่น 4: ทีมเกษตรกรสุดป่วน • หาของป่าลึก • ผัก 9 ชนิด 🔥</div>
 
-    <!-- ฉากการ์ตูน SVG -->
+    <!-- ฉากการ์ตูน SVG ขนาดใหญ่ สดใส สนุกสนาน -->
     <div class="hero-scene">
-      <svg viewBox="0 0 460 175" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <rect width="460" height="175" fill="#81d4fa"/>
-        <circle cx="415" cy="34" r="22" fill="#fdd835"/>
-        <circle cx="409" cy="31" r="2.5" fill="#333"/>
-        <circle cx="421" cy="31" r="2.5" fill="#333"/>
-        <path d="M409 39 Q415 45 421 39" stroke="#333" stroke-width="2" fill="none"/>
-        <g fill="#ffffff" opacity="0.9">
-          <circle cx="65" cy="32" r="14"/><circle cx="80" cy="28" r="18"/><circle cx="98" cy="33" r="13"/>
-          <circle cx="290" cy="26" r="12"/><circle cx="305" cy="23" r="15"/><circle cx="320" cy="27" r="11"/>
+      <svg viewBox="0 0 540 250" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#29b6f6"/>
+            <stop offset="100%" stop-color="#b3e5fc"/>
+          </linearGradient>
+          <linearGradient id="hillGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#9ccc65"/>
+            <stop offset="100%" stop-color="#558b2f"/>
+          </linearGradient>
+          <pattern id="plaidShirt" width="8" height="8" patternUnits="userSpaceOnUse">
+            <rect width="8" height="8" fill="#ff7043"/>
+            <path d="M 8 0 L 0 0 0 8" fill="none" stroke="#ffe082" stroke-width="1.5" opacity="0.8"/>
+            <rect x="0" y="0" width="4" height="4" fill="#d84315" opacity="0.35"/>
+          </pattern>
+        </defs>
+
+        <!-- ท้องฟ้า -->
+        <rect width="540" height="250" fill="url(#skyGrad)"/>
+
+        <!-- ดวงอาทิตย์ยิ้มแฉ่ง + รัศมีหมุน -->
+        <g class="sun-rays">
+          <line x1="485" y1="6" x2="485" y2="70" stroke="#ffee58" stroke-width="4" stroke-linecap="round"/>
+          <line x1="453" y1="38" x2="517" y2="38" stroke="#ffee58" stroke-width="4" stroke-linecap="round"/>
+          <line x1="462" y1="15" x2="508" y2="61" stroke="#ffee58" stroke-width="4" stroke-linecap="round"/>
+          <line x1="508" y1="15" x2="462" y2="61" stroke="#ffee58" stroke-width="4" stroke-linecap="round"/>
         </g>
-        <path d="M0 125 Q90 65 190 125 T380 125 L460 100 L460 175 L0 175 Z" fill="#81c784"/>
-        <rect x="0" y="122" width="460" height="53" fill="#66bb6a"/>
-        <rect x="18" y="82" width="56" height="44" fill="#e53935" rx="2"/>
-        <polygon points="12,82 46,56 80,82" fill="#b71c1c"/>
-        <rect x="36" y="98" width="20" height="28" fill="#ffe082"/>
-        <line x1="36" y1="98" x2="56" y2="126" stroke="#8d6e63" stroke-width="2"/>
-        <line x1="56" y1="98" x2="36" y2="126" stroke="#8d6e63" stroke-width="2"/>
+        <circle cx="485" cy="38" r="24" fill="#fdd835" stroke="#fbc02d" stroke-width="2"/>
+        <circle cx="478" cy="34" r="2.8" fill="#3e2723"/>
+        <circle cx="492" cy="34" r="2.8" fill="#3e2723"/>
+        <path d="M477 43 Q485 51 493 43" stroke="#3e2723" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="473" cy="40" r="3" fill="#ff8a65" opacity="0.7"/>
+        <circle cx="497" cy="40" r="3" fill="#ff8a65" opacity="0.7"/>
 
-        <g class="crowd-anim">
-          <circle cx="112" cy="96" r="13" fill="#ffcc80"/>
-          <path d="M98 92 Q112 76 126 92 Z" fill="#ffb300"/>
-          <rect x="101" y="109" width="22" height="24" rx="5" fill="#1e88e5"/>
-          <path d="M101 112 L88 94" stroke="#ffcc80" stroke-width="5" stroke-linecap="round"/>
-          <path d="M123 112 L134 95" stroke="#ffcc80" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="108" cy="95" r="1.8" fill="#333"/><circle cx="116" cy="95" r="1.8" fill="#333"/>
-          <path d="M108 101 Q112 106 116 101" stroke="#d84315" stroke-width="2" fill="none"/>
-
-          <circle cx="152" cy="100" r="12" fill="#ffe0b2"/>
-          <circle cx="152" cy="87" r="7" fill="#4e342e"/>
-          <rect x="142" y="112" width="20" height="22" rx="5" fill="#ec407a"/>
-          <circle cx="137" cy="106" r="8" fill="#7cb342"/>
-          <circle cx="149" cy="99" r="1.8" fill="#333"/><circle cx="156" cy="99" r="1.8" fill="#333"/>
-          <circle cx="152" cy="105" r="3" fill="#e53935"/>
-
-          <circle cx="312" cy="99" r="13" fill="#ffcc80"/>
-          <path d="M298 95 Q312 80 326 95 Z" fill="#8d6e63"/>
-          <rect x="301" y="112" width="22" height="23" rx="5" fill="#fb8c00"/>
-          <line x1="330" y1="125" x2="330" y2="82" stroke="#5d4037" stroke-width="3"/>
-          <rect x="318" y="66" width="26" height="18" rx="3" fill="#fff176" stroke="#fbc02d" stroke-width="1.5"/>
-          <text x="331" y="79" font-size="12" font-weight="bold" text-anchor="middle" fill="#2e7d32">฿฿฿</text>
-          <circle cx="308" cy="98" r="1.8" fill="#333"/><circle cx="316" cy="98" r="1.8" fill="#333"/>
-          <path d="M308 104 Q312 109 316 104" stroke="#333" stroke-width="2" fill="none"/>
-
-          <circle cx="358" cy="93" r="12" fill="#ffe0b2"/>
-          <rect x="348" y="105" width="20" height="22" rx="5" fill="#8e24aa"/>
-          <path d="M348 108 L338 92" stroke="#ffe0b2" stroke-width="4.5" stroke-linecap="round"/>
-          <path d="M368 108 L379 91" stroke="#ffe0b2" stroke-width="4.5" stroke-linecap="round"/>
-          <circle cx="354" cy="92" r="1.8" fill="#333"/><circle cx="362" cy="92" r="1.8" fill="#333"/>
-          <path d="M354 98 Q358 104 362 98 Z" fill="#e53935"/>
+        <!-- ก้อนเมฆลอยนุ่มนวล -->
+        <g class="cloud-move" fill="#ffffff" opacity="0.92">
+          <circle cx="65" cy="42" r="16"/><circle cx="84" cy="36" r="21"/><circle cx="106" cy="41" r="15"/>
+          <circle cx="345" cy="32" r="14"/><circle cx="363" cy="27" r="18"/><circle cx="381" cy="33" r="13"/>
         </g>
 
-        <rect x="20" y="142" width="420" height="33" rx="8" fill="#6d4c41"/>
-        <text x="55" y="162" font-size="20">🥬</text>
-        <text x="105" y="162" font-size="20">🥕</text>
-        <text x="155" y="162" font-size="20">🌶️</text>
-        <text x="295" y="162" font-size="20">🥦</text>
-        <text x="345" y="162" font-size="20">🍓</text>
-        <text x="395" y="162" font-size="20">🍈</text>
+        <!-- ภูเขาและทุ่งหญ้า -->
+        <path d="M0 165 Q110 95 230 160 T460 155 L540 135 L540 250 L0 250 Z" fill="url(#hillGrad)"/>
+        <rect x="0" y="168" width="540" height="82" fill="#7cb342"/>
 
-        <g class="funny-hero">
-          <path d="M196 68 Q174 52 178 82 Q188 78 198 76 Z" fill="#3e2723"/>
-          <path d="M264 68 Q286 52 282 82 Q272 78 262 76 Z" fill="#3e2723"/>
-          <circle cx="195" cy="67" r="4" fill="#ff4081"/>
-          <circle cx="265" cy="67" r="4" fill="#ff4081"/>
-          <ellipse cx="230" cy="48" rx="46" ry="12" fill="#fdd835" stroke="#f57f17" stroke-width="2" transform="rotate(-6 230 48)"/>
-          <path d="M204 47 Q230 22 256 45 Z" fill="#ffee58" stroke="#f57f17" stroke-width="2" transform="rotate(-6 230 48)"/>
-          <path d="M204 46 L256 44" stroke="#e53935" stroke-width="4" transform="rotate(-6 230 48)"/>
-          <circle cx="230" cy="76" r="28" fill="#ffe0b2" stroke="#e65100" stroke-width="1.5"/>
-          <circle cx="211" cy="83" r="5.5" fill="#ff8a80" opacity="0.75"/>
-          <circle cx="249" cy="83" r="5.5" fill="#ff8a80" opacity="0.75"/>
-          <circle cx="218" cy="74" r="11" fill="#ffffff" stroke="#1a237e" stroke-width="3.5"/>
-          <circle cx="242" cy="74" r="11" fill="#ffffff" stroke="#1a237e" stroke-width="3.5"/>
-          <line x1="229" y1="74" x2="231" y2="74" stroke="#1a237e" stroke-width="3.5"/>
-          <circle cx="221" cy="74" r="4" fill="#000000"/>
-          <circle cx="222" cy="72" r="1.5" fill="#ffffff"/>
-          <circle cx="239" cy="74" r="4" fill="#000000"/>
-          <circle cx="240" cy="72" r="1.5" fill="#ffffff"/>
-          <path d="M218 89 Q230 103 242 89 Z" fill="#b71c1c"/>
-          <rect x="225" y="89" width="10" height="3.5" fill="#ffffff"/>
-          <path d="M227 96 Q232 104 236 96 Z" fill="#ff80ab"/>
-          <rect x="208" y="104" width="44" height="44" rx="10" fill="#ffca28"/>
-          <rect x="213" y="114" width="34" height="36" rx="6" fill="#1565c0"/>
-          <line x1="216" y1="104" x2="218" y2="116" stroke="#1565c0" stroke-width="5"/>
-          <line x1="244" y1="104" x2="242" y2="116" stroke="#1565c0" stroke-width="5"/>
-          <circle cx="218" cy="117" r="2.5" fill="#ffd54f"/>
-          <circle cx="242" cy="117" r="2.5" fill="#ffd54f"/>
-          <path d="M208 110 L186 92" stroke="#ffe0b2" stroke-width="7" stroke-linecap="round"/>
-          <line x1="184" y1="138" x2="188" y2="62" stroke="#6d4c41" stroke-width="4.5" stroke-linecap="round"/>
-          <path d="M174 64 L200 60 L196 72 L176 74 Z" fill="#90a4ae" stroke="#455a64" stroke-width="1.5"/>
-          <path d="M252 110 L274 92" stroke="#ffe0b2" stroke-width="7" stroke-linecap="round"/>
-          <text x="268" y="92" font-size="18">✌️</text>
+        <!-- โรงนาสีแดงด้านซ้าย -->
+        <rect x="14" y="112" width="66" height="58" fill="#e53935" rx="3" stroke="#b71c1c" stroke-width="1.5"/>
+        <polygon points="8,112 47,80 86,112" fill="#b71c1c"/>
+        <rect x="34" y="132" width="26" height="38" fill="#ffe082" stroke="#8d6e63" stroke-width="2"/>
+        <line x1="34" y1="132" x2="60" y2="170" stroke="#8d6e63" stroke-width="2"/>
+        <line x1="60" y1="132" x2="34" y2="170" stroke="#8d6e63" stroke-width="2"/>
+
+        <!-- ไก่น้อยและวัวน้อยในฟาร์ม -->
+        <g transform="translate(465, 148)">
+          <ellipse cx="22" cy="18" rx="18" ry="12" fill="#ffffff" stroke="#cfd8dc" stroke-width="1.5"/>
+          <circle cx="14" cy="15" r="4" fill="#37474f"/>
+          <circle cx="28" cy="20" r="3.5" fill="#37474f"/>
+          <circle cx="8" cy="10" r="8" fill="#ffffff" stroke="#cfd8dc" stroke-width="1.5"/>
+          <ellipse cx="8" cy="13" rx="6" ry="4" fill="#ffccbc"/>
+          <circle cx="5" cy="8" r="1.5" fill="#000"/><circle cx="11" cy="8" r="1.5" fill="#000"/>
+          <path d="M3 3 L5 -1 M13 3 L11 -1" stroke="#8d6e63" stroke-width="2"/>
         </g>
 
-        <rect x="135" y="6" width="190" height="22" rx="11" fill="rgba(255,255,255,0.88)"/>
-        <text x="230" y="21" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#1b5e20">
-          🎉 หมู่บ้านตางค์เฮฮา เปิดฟาร์มแล้วจ้า! 🎉
+        <!-- ป้ายชื่อหมู่บ้านด้านบน -->
+        <rect x="145" y="10" width="250" height="26" rx="13" fill="rgba(255,255,255,0.92)" stroke="#fbc02d" stroke-width="2"/>
+        <text x="270" y="27" font-size="13" font-weight="bold" text-anchor="middle" fill="#1b5e20">
+          🌻 ทีมเกษตรกรหมู่บ้านตางค์ ลุยสวนเฮฮา! 🌻
         </text>
+
+        <!-- =========================================
+             ทีมเกษตรกรฝั่งซ้าย (2 คน)
+             ========================================= -->
+        <g class="team-left">
+          <!-- เพื่อนเกษตรกรคนที่ 1 (ชายใส่หมวกแก๊ป ถือบัวรดน้ำ) -->
+          <circle cx="112" cy="130" r="16" fill="#ffcc80" stroke="#e65100" stroke-width="1.2"/>
+          <path d="M96 124 Q112 108 128 124 Z" fill="#1e88e5"/>
+          <rect x="112" y="121" width="22" height="4" rx="2" fill="#1565c0"/>
+          <!-- ตาและรอยยิ้ม -->
+          <circle cx="107" cy="129" r="2.2" fill="#263238"/><circle cx="118" cy="129" r="2.2" fill="#263238"/>
+          <path d="M107 136 Q112 143 118 136" stroke="#d84315" stroke-width="2.2" fill="none"/>
+          <!-- เสื้อแขนยาวสีฟ้า -->
+          <rect x="98" y="146" width="28" height="34" rx="6" fill="#29b6f6"/>
+          <path d="M98 150 L82 134" stroke="#29b6f6" stroke-width="7" stroke-linecap="round"/>
+          <circle cx="81" cy="133" r="4" fill="#ffcc80"/>
+          <path d="M126 150 L140 162" stroke="#29b6f6" stroke-width="7" stroke-linecap="round"/>
+          <!-- บัวรดน้ำสีเขียว -->
+          <rect x="134" y="156" width="16" height="14" rx="3" fill="#43a047"/>
+          <line x1="150" y1="164" x2="160" y2="154" stroke="#43a047" stroke-width="3"/>
+
+          <!-- เพื่อนเกษตรกรคนที่ 2 (หญิงมัดจุก ชูแครอทยักษ์) -->
+          <circle cx="168" cy="135" r="15" fill="#ffe0b2" stroke="#e65100" stroke-width="1.2"/>
+          <circle cx="168" cy="118" r="8" fill="#4e342e"/>
+          <circle cx="163" cy="134" r="2" fill="#263238"/><circle cx="173" cy="134" r="2" fill="#263238"/>
+          <path d="M163 140 Q168 146 173 140 Z" fill="#e53935"/>
+          <rect x="155" y="150" width="26" height="32" rx="6" fill="#ec407a"/>
+          <path d="M155 154 L144 138" stroke="#ec407a" stroke-width="6" stroke-linecap="round"/>
+          <!-- แครอท -->
+          <polygon points="140,138 148,138 144,116" fill="#ff6f00"/>
+          <path d="M144 116 L140 109 M144 116 L148 109" stroke="#2e7d32" stroke-width="2"/>
+        </g>
+
+        <!-- =========================================
+             ทีมเกษตรกรฝั่งขวา (2 คน)
+             ========================================= -->
+        <g class="team-right">
+          <!-- เพื่อนเกษตรกรคนที่ 3 (ชูป้าย ฿฿฿ รวยๆ) -->
+          <circle cx="372" cy="133" r="16" fill="#ffcc80" stroke="#e65100" stroke-width="1.2"/>
+          <path d="M355 128 Q372 110 389 128 Z" fill="#8d6e63"/>
+          <circle cx="367" cy="132" r="2.2" fill="#263238"/><circle cx="377" cy="132" r="2.2" fill="#263238"/>
+          <path d="M366 138 Q372 145 378 138" stroke="#263238" stroke-width="2.2" fill="none"/>
+          <rect x="358" y="149" width="28" height="33" rx="6" fill="#ffa726"/>
+          <path d="M386 153 L398 134" stroke="#ffa726" stroke-width="7" stroke-linecap="round"/>
+          <!-- ป้าย ฿฿฿ -->
+          <line x1="398" y1="175" x2="398" y2="104" stroke="#5d4037" stroke-width="3.5"/>
+          <rect x="380" y="84" width="38" height="24" rx="5" fill="#fff176" stroke="#f57f17" stroke-width="2"/>
+          <text x="399" y="101" font-size="14" font-weight="bold" text-anchor="middle" fill="#2e7d32">฿฿฿</text>
+
+          <!-- เพื่อนเกษตรกรคนที่ 4 (สายลุย ยกสองมือเฮ) -->
+          <circle cx="430" cy="128" r="15" fill="#ffe0b2" stroke="#e65100" stroke-width="1.2"/>
+          <path d="M416 122 Q430 112 444 122" fill="#3e2723"/>
+          <circle cx="425" cy="127" r="2" fill="#263238"/><circle cx="435" cy="127" r="2" fill="#263238"/>
+          <path d="M425 133 Q430 140 435 133 Z" fill="#d84315"/>
+          <rect x="417" y="143" width="26" height="34" rx="6" fill="#ab47bc"/>
+          <path d="M417 147 L405 126" stroke="#ab47bc" stroke-width="6" stroke-linecap="round"/>
+          <path d="M443 147 L456 126" stroke="#ab47bc" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <!-- =========================================
+             ตัวละครหลักตรงกลาง: เกษตรกรหญิงใส่แว่นตาโต + เสื้อแขนยาวลายสก๊อต + เอี๊ยมยีนส์
+             ========================================= -->
+        <g class="funny-hero">
+          <!-- ผมแกละสองข้างน่ารัก -->
+          <path d="M226 95 Q196 76 202 118 Q216 112 230 108 Z" fill="#4e342e"/>
+          <path d="M314 95 Q344 76 338 118 Q324 112 310 108 Z" fill="#4e342e"/>
+          <circle cx="225" cy="94" r="5.5" fill="#ff4081"/>
+          <circle cx="315" cy="94" r="5.5" fill="#ff4081"/>
+
+          <!-- หมวกฟางใบใหญ่เอียงนิดๆ -->
+          <ellipse cx="270" cy="68" rx="62" ry="15" fill="#fdd835" stroke="#f57f17" stroke-width="2.5" transform="rotate(-4 270 68)"/>
+          <path d="M234 67 Q270 32 306 65 Z" fill="#ffee58" stroke="#f57f17" stroke-width="2.5" transform="rotate(-4 270 68)"/>
+          <path d="M234 66 L306 64" stroke="#e53935" stroke-width="5" transform="rotate(-4 270 68)"/>
+
+          <!-- ใบหน้ากลมโตสดใส -->
+          <circle cx="270" cy="106" r="36" fill="#ffe0b2" stroke="#e65100" stroke-width="2"/>
+          <!-- แก้มแดงระเรื่อ -->
+          <ellipse cx="245" cy="116" rx="7.5" ry="5" fill="#ff8a80" opacity="0.8"/>
+          <ellipse cx="295" cy="116" rx="7.5" ry="5" fill="#ff8a80" opacity="0.8"/>
+
+          <!-- แว่นตากลมโตกรอบสีน้ำเงินเข้ม -->
+          <circle cx="254" cy="103" r="14.5" fill="#ffffff" stroke="#1a237e" stroke-width="4"/>
+          <circle cx="286" cy="103" r="14.5" fill="#ffffff" stroke="#1a237e" stroke-width="4"/>
+          <line x1="268.5" y1="103" x2="271.5" y2="103" stroke="#1a237e" stroke-width="4"/>
+          <!-- แสงสะท้อนบนเลนส์แว่น -->
+          <path d="M245 96 L251 92" stroke="#b3e5fc" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M277 96 L283 92" stroke="#b3e5fc" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- ลูกตาดำเป็นประกาย -->
+          <circle cx="257" cy="103" r="5.5" fill="#111111"/>
+          <circle cx="259" cy="100" r="2.2" fill="#ffffff"/>
+          <circle cx="283" cy="103" r="5.5" fill="#111111"/>
+          <circle cx="285" cy="100" r="2.2" fill="#ffffff"/>
+
+          <!-- ปากยิ้มหัวเราะกว้าง -->
+          <path d="M254 123 Q270 142 286 123 Z" fill="#b71c1c"/>
+          <rect x="263" y="123" width="14" height="4.5" rx="1" fill="#ffffff"/>
+          <path d="M265 133 Q271 142 277 133 Z" fill="#ff80ab"/>
+
+          <!-- เสื้อแขนยาวลายสก๊อตสีสดใส -->
+          <rect x="240" y="142" width="60" height="54" rx="12" fill="url(#plaidShirt)" stroke="#d84315" stroke-width="1.5"/>
+
+          <!-- แขนเสื้อยาวซ้าย (ถือจอบ) -->
+          <path d="M242 148 L210 128" stroke="url(#plaidShirt)" stroke-width="13" stroke-linecap="round"/>
+          <circle cx="209" cy="127" r="6.5" fill="#ffe0b2"/>
+          <!-- ด้ามจอบและใบจอบ -->
+          <line x1="205" y1="195" x2="213" y2="88" stroke="#5d4037" stroke-width="5.5" stroke-linecap="round"/>
+          <path d="M194 90 L228 84 L222 100 L196 104 Z" fill="#90a4ae" stroke="#37474f" stroke-width="2"/>
+
+          <!-- แขนเสื้อยาวขวา (ชูสองนิ้ว ✌️) -->
+          <path d="M298 148 L330 126" stroke="url(#plaidShirt)" stroke-width="13" stroke-linecap="round"/>
+          <circle cx="331" cy="125" r="6.5" fill="#ffe0b2"/>
+          <text x="323" y="122" font-size="22">✌️</text>
+
+          <!-- เอี๊ยมยีนส์สีน้ำเงินเข้ม -->
+          <rect x="248" y="156" width="44" height="42" rx="7" fill="#1565c0" stroke="#0d47a1" stroke-width="1.5"/>
+          <line x1="252" y1="142" x2="255" y2="158" stroke="#1565c0" stroke-width="6.5"/>
+          <line x1="288" y1="142" x2="285" y2="158" stroke="#1565c0" stroke-width="6.5"/>
+          <!-- กระดุมทองเอี๊ยมยีนส์ -->
+          <circle cx="255" cy="160" r="3" fill="#ffd54f"/>
+          <circle cx="285" cy="160" r="3" fill="#ffd54f"/>
+          <!-- กระเป๋าหน้าอกเอี๊ยมมีแครอทโผล่ -->
+          <rect x="261" y="168" width="18" height="14" rx="3" fill="#1976d2" stroke="#0d47a1" stroke-width="1"/>
+          <text x="263" y="175" font-size="11">🥕</text>
+        </g>
+
+        <!-- แปลงผักด้านหน้าสุด (Foreground Garden Bed) -->
+        <rect x="16" y="194" width="508" height="48" rx="12" fill="#6d4c41" stroke="#4e342e" stroke-width="3"/>
+        <rect x="24" y="200" width="492" height="36" rx="8" fill="#8d6e63"/>
+        <text x="42" y="226" font-size="24">🥬</text>
+        <text x="95" y="226" font-size="24">🥕</text>
+        <text x="148" y="226" font-size="24">🍅</text>
+        <text x="200" y="226" font-size="24">🌽</text>
+        <text x="315" y="226" font-size="24">🌶️</text>
+        <text x="368" y="226" font-size="24">🍓</text>
+        <text x="420" y="226" font-size="24">🎃</text>
+        <text x="472" y="226" font-size="24">🍈</text>
       </svg>
     </div>
 
-    <!-- แถบเลือกโหมด: สร้างตัวละครใหม่ vs โหลดเซฟเดิม -->
+    <!-- แท็บเลือกโหมด: สร้างตัวละครใหม่ vs โหลดเซฟเดิม -->
     <div class="auth-tabs">
       <button class="auth-tab active" id="tab-new" onclick="switchAuthTab('new')">✨ สร้างตัวละครใหม่</button>
       <button class="auth-tab" id="tab-load" onclick="switchAuthTab('load')">📂 โหลดเซฟเดิมเล่นต่อ</button>
@@ -346,11 +657,11 @@
       <div class="gender-select">
         <div class="gender-card active" id="card-female" onclick="selectGender('หญิง')">
           <span class="avatar">👩‍🌾👓</span>
-          <strong>เกษตรกรหญิง (สายฮา)</strong>
+          <strong>เกษตรกรหญิง (ใส่แว่นสายฮา)</strong>
         </div>
         <div class="gender-card" id="card-male" onclick="selectGender('ชาย')">
           <span class="avatar">👨‍🌾🤠</span>
-          <strong>เกษตรกรชาย (สายลุย)</strong>
+          <strong>เกษตรกรชาย (สายลุยป่า)</strong>
         </div>
       </div>
 
@@ -375,7 +686,7 @@
 <!-- 2. หน้าจอหลักของเกม -->
 <div id="game-container">
   <div class="top-banner">
-    <span>🏡 เดอะซิมส์ ภาคพิสดาร ตางค์</span>
+    <span>🏡 เดอะซิมส์ ภาคพิสดาร ตางค์ (เวอร์ชั่น 4)</span>
     <span style="font-size:0.85rem; font-weight:normal;">รหัสผู้เล่น: <strong id="banner-id">-</strong></span>
   </div>
 
@@ -401,8 +712,8 @@
       <div class="badge">💰 เงินทุน: <span id="hud-gold">60</span> บ.</div>
       <div class="badge">🏆 คะแนน: <span id="hud-score">0</span></div>
       <div class="badge">🧺 เก็บเกี่ยว: <span id="hud-harvested">0</span></div>
-      <button class="btn btn-forest" onclick="forageForest()" id="btn-forage">🌲 หาของป่า (-6 ⚡)</button>
-      <button class="btn btn-warning" onclick="restPlayer()">💤 พักผ่อน (จ่าย 50 บ.)</button>
+      <button class="btn btn-forest" onclick="forageForest()" id="btn-forage">🌲 หาของป่า (-12 ⚡)</button>
+      <button class="btn btn-warning" onclick="restPlayer()">💤 พักผ่อน (จ่าย 100 บ. / +20 ⚡)</button>
       <button class="btn btn-secondary" id="btn-save" onclick="saveToCloud()">☁️ บันทึกเซฟ</button>
     </div>
   </div>
@@ -411,13 +722,13 @@
     <!-- คอลัมน์ซ้าย: เครื่องมือและแปลงผัก -->
     <div>
       <div class="panel">
-        <h3>🛠️ เลือกการกระทำ (คลิกที่ช่องดินเพื่อใช้งาน)</h3>
+        <h3>🛠️ เลือกการกระทำ (คลิกที่แปลงดินเพื่อดูแลพืช)</h3>
         <div class="toolbar">
           <button class="tool-btn active" id="tool-plant" onclick="setTool('plant')">
-            🌱 ปลูกเมล็ด (<span id="cost-plant-stam">1</span> ⚡)<br><small id="selected-seed-label">ผักบุ้งจีน (10 บ.)</small>
+            🌱 ปลูกเมล็ด (-<span id="cost-plant-stam">1</span> ⚡)<br><small id="selected-seed-label">ผักบุ้งจีน (10 บ.)</small>
           </button>
           <button class="tool-btn" id="tool-water" onclick="setTool('water')">
-            💧 รดน้ำ (-2 ⚡)<br><small>โตปกติ +คุณภาพ</small>
+            💧 รดน้ำ (-2 ⚡)<br><small>ดินชุ่มโตเต็มสปีด</small>
           </button>
           <button class="tool-btn" id="tool-fert" onclick="setTool('fert')">
             🧪 ใส่ปุ๋ย (-3 ⚡)<br><small>มีปุ๋ย: <span id="fert-count">1</span> ถุง</small>
@@ -437,9 +748,9 @@
       <div class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h3 style="border:none; margin:0;">🛒 ตะกร้าผลผลิต & ของป่า</h3>
-          <button class="btn btn-primary" style="width:auto; padding:6px 12px; font-size:0.85rem;" onclick="sellAllProduce()">💰 ขายทั้งหมด</button>
+          <button class="btn btn-primary" style="width:auto; padding:6px 14px; font-size:0.85rem;" onclick="sellAllProduce()">💰 ขายทั้งหมด</button>
         </div>
-        <div id="inventory-list" style="margin-top:8px; max-height:180px; overflow-y:auto;">
+        <div id="inventory-list" style="margin-top:8px; max-height:190px; overflow-y:auto;">
           <div style="color:#888; font-size:0.85rem;">ยังไม่มีผลผลิตในตะกร้า</div>
         </div>
       </div>
@@ -448,10 +759,10 @@
       <div class="panel">
         <h3>🏪 ตลาดหมู่บ้านตางค์</h3>
         <div class="shop-tabs">
-          <button class="shop-tab-btn active" id="stab-seeds" onclick="switchShopTab('seeds')">🌱 เมล็ดพันธุ์ & ปุ๋ย</button>
-          <button class="shop-tab-btn" id="stab-equips" onclick="switchShopTab('equips')">🎒 อุปกรณ์ตัวละคร (แรร์)</button>
+          <button class="shop-tab-btn active" id="stab-seeds" onclick="switchShopTab('seeds')">🌱 เมล็ดพันธุ์ 9 ชนิด & ปุ๋ย</button>
+          <button class="shop-tab-btn" id="stab-equips" onclick="switchShopTab('equips')">🎒 อุปกรณ์แรร์ (6 ชิ้น)</button>
         </div>
-        <div id="shop-list"></div>
+        <div class="shop-scroll" id="shop-list"></div>
       </div>
 
       <!-- สถิติผู้เล่น & อันดับสูงสุด -->
@@ -481,35 +792,47 @@
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxy5pVYAz0Fj9A56j5vcWwkNVgc9oWnDOk2jeLS03WJKs_PYJaSWabJuzx8GSTvHQNy/exec";
 
-  // ปรับเวลาโตให้นานขึ้น (ยากขึ้น)
+  // 1. ผัก 9 ชนิด โตยากขึ้นเล็กน้อยและกระจายเลเวลปลดล็อก
   const SEEDS = [
-    { id: 'morning_glory', name: 'ผักบุ้งจีน', icon: '🥬', cost: 10, baseSell: 19, growTime: 45, exp: 12, reqLv: 1 },
-    { id: 'kale', name: 'คะน้าฮ่องกง', icon: '🥦', cost: 25, baseSell: 50, growTime: 85, exp: 28, reqLv: 1 },
-    { id: 'chili', name: 'พริกจินดา', icon: '🌶️', cost: 55, baseSell: 115, growTime: 140, exp: 60, reqLv: 2 },
-    { id: 'strawberry', name: 'สตรอว์เบอร์รี', icon: '🍓', cost: 120, baseSell: 260, growTime: 220, exp: 130, reqLv: 3 },
-    { id: 'melon', name: 'เมล่อนญี่ปุ่น', icon: '🍈', cost: 260, baseSell: 590, growTime: 320, exp: 290, reqLv: 4 }
+    { id: 'morning_glory', name: 'ผักบุ้งจีน', icon: '🥬', cost: 10, baseSell: 20, growTime: 55, exp: 14, reqLv: 1 },
+    { id: 'bok_choy', name: 'กวางตุ้งไต้หวัน', icon: '🥗', cost: 18, baseSell: 36, growTime: 75, exp: 22, reqLv: 1 },
+    { id: 'kale', name: 'คะน้าฮ่องกง', icon: '🥦', cost: 30, baseSell: 62, growTime: 105, exp: 34, reqLv: 2 },
+    { id: 'tomato', name: 'มะเขือเทศราชินี', icon: '🍅', cost: 48, baseSell: 102, growTime: 135, exp: 52, reqLv: 2 },
+    { id: 'chili', name: 'พริกจินดา', icon: '🌶️', cost: 70, baseSell: 152, growTime: 170, exp: 76, reqLv: 3 },
+    { id: 'corn', name: 'ข้าวโพดหวาน', icon: '🌽', cost: 100, baseSell: 220, growTime: 210, exp: 110, reqLv: 3 },
+    { id: 'strawberry', name: 'สตรอว์เบอร์รี', icon: '🍓', cost: 145, baseSell: 325, growTime: 260, exp: 160, reqLv: 4 },
+    { id: 'pumpkin', name: 'ฟักทองยักษ์', icon: '🎃', cost: 210, baseSell: 480, growTime: 320, exp: 235, reqLv: 5 },
+    { id: 'melon', name: 'เมล่อนญี่ปุ่น', icon: '🍈', cost: 300, baseSell: 700, growTime: 390, exp: 340, reqLv: 6 }
   ];
 
-  // รายการของป่าที่สุ่มหาได้โดยไม่ต้องปลูก
+  // 2. รายการของป่า 10 ชนิด ตั้งแต่ทั่วไปจนถึงแรร์ไอเทม
   const WILD_ITEMS = [
-    { name: 'ผักหวานป่า', icon: '🌿', price: 16, weight: 40 },
-    { name: 'หน่อไม้ไผ่ตง', icon: '🎍', price: 28, weight: 30 },
-    { name: 'เห็ดโคนธรรมชาติ', icon: '🍄', price: 48, weight: 18 },
-    { name: 'น้ำผึ้งเดือนห้า', icon: '🍯', price: 85, weight: 9 },
-    { name: 'โสมป่าพันปี', icon: '🫚', price: 160, weight: 3 }
+    { name: 'ผักหวานป่า', icon: '🌿', price: 22, weight: 25 },
+    { name: 'หน่อไม้ไผ่ตง', icon: '🎍', price: 32, weight: 20 },
+    { name: 'กล้วยป่า', icon: '🍌', price: 42, weight: 16 },
+    { name: 'เห็ดโคนธรรมชาติ', icon: '🍄', price: 58, weight: 13 },
+    { name: 'สมุนไพรว่านชักมดลูก', icon: '🌱', price: 78, weight: 9 },
+    { name: 'รังผึ้งป่า', icon: '🐝', price: 105, weight: 6 },
+    { name: 'น้ำผึ้งเดือนห้า', icon: '🍯', price: 140, weight: 4.5 },
+    { name: 'เห็ดหลินจือแดง', icon: '🍄‍🟫', price: 190, weight: 3 },
+    { name: 'โสมป่าพันปี', icon: '🫚', price: 260, weight: 2 },
+    { name: 'เห็ดทรัฟเฟิลทองคำ', icon: '🥔✨', price: 380, weight: 1.5 }
   ];
 
-  // อุปกรณ์สวมใส่ราคาสูง (ซื้อได้หรือดรอปจากป่า)
+  // 3. อุปกรณ์สวมใส่ 6 ชิ้น (ซื้อได้หรือดรอปจากป่า)
   const EQUIPMENTS = [
-    { id: 'gloves', name: 'ถุงมือเกษตรกรโปร', icon: '🧤', cost: 450, desc: 'ลดพลังงานปลูก & เก็บเกี่ยว -1 ⚡' },
+    { id: 'gloves', name: 'ถุงมือเกษตรกรโปร', icon: '🧤', cost: 450, desc: 'ลดพลังงานเก็บเกี่ยว -1 ⚡' },
     { id: 'can', name: 'บัวรดน้ำทองคำ', icon: '🚿', cost: 850, desc: 'รดน้ำ & ใส่ปุ๋ยแรงขึ้น +25%' },
-    { id: 'boots', name: 'รองเท้าเดินป่าสายฟ้า', icon: '🥾', cost: 1200, desc: 'หาของป่าใช้แค่ 4 ⚡ & เพิ่มโอกาสได้ของแรร์' }
+    { id: 'boots', name: 'รองเท้าเดินป่าสายฟ้า', icon: '🥾', cost: 1200, desc: 'หาของป่าใช้แค่ 9 ⚡ (ลดจาก 12) & เพิ่มโอกาสของแรร์' },
+    { id: 'hat', name: 'หมวกฟางกันแดดซูเปอร์', icon: '👒', cost: 1600, desc: 'เพิ่มอัตราฟื้นฟูพลังงานอัตโนมัติ +0.5 ⚡/นาที' },
+    { id: 'basket', name: 'ตะกร้าสานวิเศษ', icon: '🧺', cost: 2200, desc: 'ขายผลผลิตและของป่าได้ราคาเพิ่มขึ้น +15%' },
+    { id: 'amulet', name: 'ตะกรุดเรียกทรัพย์ป่าลึก', icon: '🧿', cost: 3500, desc: 'เพิ่มโอกาสดรอปอุปกรณ์แรร์จากป่า 2 เท่า & เพิ่มผักพรีเมียม' }
   ];
 
   const PLOT_UNLOCK_RULES = [
-    { zone: 0, title: "แปลงที่ 1 (แปลงเริ่มต้น 9 ต้น)", reqLv: 1, cost: 0 },
-    { zone: 1, title: "แปลงที่ 2 (ขยายพื้นที่ 9 ต้น)", reqLv: 2, cost: 150 },
-    { zone: 2, title: "แปลงที่ 3 (ฟาร์มใหญ่ 9 ต้น)", reqLv: 4, cost: 450 }
+    { zone: 0, title: "แปลงที่ 1 (แปลงเริ่มต้น 9 หลุม)", reqLv: 1, cost: 0 },
+    { zone: 1, title: "แปลงที่ 2 (ขยายสวน 9 หลุม)", reqLv: 2, cost: 150 },
+    { zone: 2, title: "แปลงที่ 3 (ฟาร์มใหญ่ 9 หลุม)", reqLv: 4, cost: 450 }
   ];
 
   let gameState = {
@@ -523,13 +846,13 @@
     totalHarvested: 0,
     totalEarned: 0,
     stamina: 30,
-    regenBuffer: 0, // เก็บเศษทศนิยมของพลังงานที่กำลังฟื้นฟู
+    regenBuffer: 0,
     fertilizer: 1,
     selectedSeedId: "morning_glory",
     unlockedZones: [true, false, false],
     cells: Array(27).fill(null),
     inventory: [],
-    equipments: [] // เก็บ id ของอุปกรณ์ที่มี เช่น ['gloves', 'can']
+    equipments: []
   };
 
   let currentTool = "plant";
@@ -563,16 +886,18 @@
 
   function getMaxStamina() { return 30 + (gameState.level - 1) * 10; }
   function getRequiredExp() { return Math.pow(gameState.level, 2) * 150; }
-  
+
   function getSkillEfficiency() {
     let base = 1 + (gameState.level - 1) * 0.12;
     if (hasEquip('can')) base += 0.25; // บัวรดน้ำทองคำ +25%
     return base;
   }
 
-  // อัตราฟื้นฟูพลังงานต่อนาที: 1.0 + 0.1 ต่อเลเวล
+  // อัตราฟื้นฟูพลังงานต่อนาที: 1.0 + 0.1 ต่อเลเวล (+0.5 ถ้ามีหมวกฟางกันแดดซูเปอร์)
   function getRegenPerMinute() {
-    return 1.0 + (gameState.level - 1) * 0.1;
+    let rate = 1.0 + (gameState.level - 1) * 0.1;
+    if (hasEquip('hat')) rate += 0.5;
+    return rate;
   }
 
   // 1. สร้างตัวละครใหม่
@@ -618,7 +943,7 @@
     }
   }
 
-  // 2. โหลดเซฟเดิมเล่นต่อ (ล็อกค่าพลังงานตามเดิมที่เล่นค้างไว้)
+  // 2. โหลดเซฟเดิมเล่นต่อ
   async function loadExistingCharacter() {
     const id = document.getElementById("load-id").value.trim();
     const statusEl = document.getElementById("login-status");
@@ -656,7 +981,6 @@
       gameState.totalEarned = data.totalEarned;
 
       if (data.saveData) {
-        // ล็อกค่าพลังงานตามที่บันทึกไว้ล่าสุด (ไม่รีเซ็ตเต็ม)
         gameState.stamina = typeof data.saveData.stamina === 'number' ? data.saveData.stamina : getMaxStamina();
         gameState.regenBuffer = typeof data.saveData.regenBuffer === 'number' ? data.saveData.regenBuffer : 0;
         gameState.fertilizer = data.saveData.fertilizer ?? 0;
@@ -727,51 +1051,58 @@
     saveToCloud(true);
   }
 
-  // พักผ่อน: มีค่าใช้จ่าย 50 บาท พร้อมแจ้งเตือน
+  // การพักผ่อน: คิดค่าใช้จ่าย 100 บาท และฟื้นฟูพลังงานได้เพียง 20 ⚡ เท่านั้น
   function restPlayer() {
     const maxStam = getMaxStamina();
     if (gameState.stamina >= maxStam) {
       return showToast("⚡ พลังงานเต็มอยู่แล้ว ไม่จำเป็นต้องเสียเงินพักผ่อน!");
     }
-    if (gameState.gold < 50) {
-      return showToast("❌ เงินไม่พอค่าพักผ่อน (ต้องใช้ 50 บาท) รอพลังงานฟื้นฟูเองนะ!");
+    if (gameState.gold < 100) {
+      return showToast("❌ เงินไม่พอค่าพักผ่อน (ต้องใช้ 100 บาท) รอพลังงานฟื้นฟูเองนะ!");
     }
 
-    gameState.gold -= 50;
-    const recover = Math.ceil(maxStam * 0.5);
+    gameState.gold -= 100;
+    const recover = 20;
+    const beforeStam = gameState.stamina;
     gameState.stamina = Math.min(maxStam, gameState.stamina + recover);
-    showToast(`💸 เสียเงินค่าพักผ่อน 50 บาท! ฟื้นฟูพลังงาน +${recover} ⚡`);
+    const actualGained = gameState.stamina - beforeStam;
+    showToast(`💸 จ่ายค่าพักผ่อน 100 บาท! ฟื้นฟูพลังงาน +${actualGained} ⚡`);
     renderAll();
   }
 
-  // คำสั่งหาของป่าขาย (ได้ของป่าเข้าตะกร้า + EXP เล็กน้อย + ลุ้นอุปกรณ์แรร์)
+  // หาของป่า: ใช้พลังงานพื้นฐาน 12 ⚡ (ลดเหลือ 9 ⚡ หากสวมรองเท้าเดินป่าสายฟ้า)
   function forageForest() {
-    const stamCost = hasEquip('boots') ? 4 : 6;
+    const stamCost = hasEquip('boots') ? 9 : 12;
     if (gameState.stamina < stamCost) {
       return showToast(`⚡ พลังงานไม่พอเข้าป่า (ต้องใช้ ${stamCost} ⚡)`);
     }
 
     gameState.stamina -= stamCost;
-    const gainedExp = 4 + Math.floor(gameState.level * 0.5);
+    const gainedExp = 6 + Math.floor(gameState.level * 0.6);
     gameState.exp += gainedExp;
 
-    // โอกาส 4% (หรือ 8% ถ้าใส่รองเท้าเดินป่า) ที่จะเจออุปกรณ์ตัวละครหล่นอยู่กลางป่า!
-    const rareChance = hasEquip('boots') ? 0.08 : 0.04;
+    // โอกาสดรอปอุปกรณ์แรร์จากป่า (พื้นฐาน 4%, รองเท้า 7%, ตะกรุดเรียกทรัพย์ป่าลึกคูณ 2 เท่า)
+    let rareChance = hasEquip('boots') ? 0.07 : 0.04;
+    if (hasEquip('amulet')) rareChance *= 2;
+
     const unownedEquips = EQUIPMENTS.filter(e => !hasEquip(e.id));
 
     if (unownedEquips.length > 0 && Math.random() < rareChance) {
       const foundEq = unownedEquips[Math.floor(Math.random() * unownedEquips.length)];
       gameState.equipments.push(foundEq.id);
       checkLevelUp();
-      showToast(`🎁 โชคหล่นทับ! เดินป่าเจอ "${foundEq.icon} ${foundEq.name}" ฟรี! (+${gainedExp} EXP)`);
+      showToast(`🎁 โชคหล่นทับ! เดินป่าลึกเจอ "${foundEq.icon} ${foundEq.name}" ฟรี! (+${gainedExp} EXP)`);
       renderAll();
       saveToCloud(true);
       return;
     }
 
-    // สุ่มของป่าตามน้ำหนัก
-    const bonusRarity = hasEquip('boots') ? 15 : 0;
-    let roll = Math.random() * 100 - bonusRarity;
+    // สุ่มของป่า 10 ชนิดตามน้ำหนัก (รองเท้าเดินป่า & ตะกรุดช่วยเพิ่มโอกาสของแรร์)
+    let bonusRarity = 0;
+    if (hasEquip('boots')) bonusRarity += 12;
+    if (hasEquip('amulet')) bonusRarity += 10;
+
+    let roll = Math.max(0.5, Math.random() * 100 - bonusRarity);
     let chosen = WILD_ITEMS[0];
     let acc = 0;
     for (const item of WILD_ITEMS) {
@@ -810,9 +1141,9 @@
     const cell = gameState.cells[cellIdx];
 
     if (currentTool === "plant") {
-      if (cell) return showToast("ช่องนี้มีต้นผักอยู่แล้ว");
+      if (cell) return showToast("หลุมนี้มีต้นผักกำลังโตอยู่แล้ว");
       const seed = SEEDS.find(s => s.id === gameState.selectedSeedId);
-      const plantCost = hasEquip('gloves') ? 1 : 1; // ขั้นต่ำ 1 หน่วย
+      const plantCost = 1;
       if (gameState.level < seed.reqLv) return showToast(`ต้องเลเวล ${seed.reqLv} จึงจะปลูก${seed.name}ได้`);
       if (gameState.gold < seed.cost) return showToast(`เงินไม่พอซื้อเมล็ด${seed.name} (${seed.cost} บ.)`);
       if (gameState.stamina < plantCost) return showToast("พลังงานหมด! รอฟื้นฟูหรือกดพักผ่อน");
@@ -829,7 +1160,7 @@
       renderPlots();
       updateHUD();
     } else if (currentTool === "water") {
-      if (!cell) return showToast("ยังไม่ได้ปลูกผักในช่องนี้");
+      if (!cell) return showToast("ยังไม่ได้ปลูกผักในหลุมนี้");
       if (cell.progress >= 100) return showToast("ผักโตเต็มที่แล้ว เก็บเกี่ยวได้เลย!");
       if (cell.watered) return showToast("ดินยังชุ่มน้ำอยู่");
       if (gameState.stamina < 2) return showToast("พลังงานไม่พอ (ใช้ 2 ⚡)");
@@ -838,11 +1169,11 @@
       cell.watered = true;
       cell.careScore += 1 * getSkillEfficiency();
       cell.progress = Math.min(100, cell.progress + (3 * getSkillEfficiency()));
-      showToast("💧 รดน้ำแล้ว ผักโตตามความเร็วปกติ!");
+      showToast("💧 รดน้ำชุ่มฉ่ำ ผักโตเต็มสปีด!");
       renderPlots();
       updateHUD();
     } else if (currentTool === "fert") {
-      if (!cell) return showToast("ยังไม่ได้ปลูกผักในช่องนี้");
+      if (!cell) return showToast("ยังไม่ได้ปลูกผักในหลุมนี้");
       if (cell.progress >= 100) return showToast("ผักโตเต็มที่แล้ว!");
       if (cell.fertilized) return showToast("ใส่ปุ๋ยต้นนี้ไปแล้ว");
       if (gameState.fertilizer <= 0) return showToast("ปุ๋ยหมด! ซื้อเพิ่มได้ที่ร้านค้า");
@@ -866,18 +1197,21 @@
       gameState.stamina -= harvCost;
       const seed = SEEDS.find(s => s.id === cell.seedId);
 
+      // ตะกรุดเรียกทรัพย์ป่าลึก ช่วยเพิ่มคะแนนการดูแลให้ติดเกรดพรีเมียมง่ายขึ้น
+      const effectiveCare = cell.careScore + (hasEquip('amulet') ? 0.9 : 0);
+
       let quality = 1;
       let qualityLabel = "เกรดธรรมดา";
       let priceMultiplier = 1.0;
 
-      if (cell.careScore >= 3.2) {
+      if (effectiveCare >= 3.2) {
         quality = 3;
         qualityLabel = "พรีเมียมอินทรีย์";
-        priceMultiplier = 1.7;
-      } else if (cell.careScore >= 1.5) {
+        priceMultiplier = 1.75;
+      } else if (effectiveCare >= 1.5) {
         quality = 2;
         qualityLabel = "คัดเกรดพิเศษ";
-        priceMultiplier = 1.3;
+        priceMultiplier = 1.35;
       }
 
       const sellPrice = Math.round(seed.baseSell * priceMultiplier);
@@ -908,24 +1242,37 @@
     gameState.inventory.forEach(item => totalMoney += item.price);
     const count = gameState.inventory.length;
 
+    // ตะกร้าสานวิเศษ เพิ่มราคาขาย +15%
+    let bonusText = "";
+    if (hasEquip('basket')) {
+      const bonus = Math.round(totalMoney * 0.15);
+      totalMoney += bonus;
+      bonusText = ` (รวมโบนัสตะกร้าวิเศษ +${bonus} บ.)`;
+    }
+
     gameState.gold += totalMoney;
     gameState.totalEarned += totalMoney;
     gameState.score += Math.round(totalMoney * 0.5);
     gameState.inventory = [];
 
-    showToast(`💰 ขายสินค้า ${count} รายการ รับเงินสด +${totalMoney} บาท!`);
+    showToast(`💰 ขายสินค้า ${count} รายการ รับเงินสด +${totalMoney} บาท!${bonusText}`);
     renderAll();
     saveToCloud(true);
   }
 
+  // ใช้ Toast แจ้งเตือนแทน alert() ตามมาตรฐาน
   function checkLevelUp() {
     let req = getRequiredExp();
+    let leveledUp = false;
     while (gameState.exp >= req) {
       gameState.exp -= req;
       gameState.level += 1;
       gameState.stamina = getMaxStamina();
-      alert(`🎉 ยินดีด้วย! คุณเลื่อนระดับเป็น เลเวล ${gameState.level}\n- พลังงานสูงสุดเพิ่มขึ้นเป็น ${getMaxStamina()}\n- อัตราฟื้นฟูพลังงานเพิ่มเป็น ${getRegenPerMinute().toFixed(1)} ⚡/นาที`);
+      leveledUp = true;
       req = getRequiredExp();
+    }
+    if (leveledUp) {
+      showToast(`🎉 เลเวลอัปเป็น Lv.${gameState.level}! พลังงานเต็ม ${getMaxStamina()} ⚡ (ฟื้นฟู ${getRegenPerMinute().toFixed(1)}/นาที)`);
     }
   }
 
@@ -937,7 +1284,7 @@
       gameState.cells.forEach(cell => {
         if (cell && cell.progress < 100) {
           const seed = SEEDS.find(s => s.id === cell.seedId);
-          const speedFactor = cell.watered ? 1.0 : 0.35; // ไม่รดน้ำโตช้ามาก (35%)
+          const speedFactor = cell.watered ? 1.0 : 0.35;
           const step = (100 / seed.growTime) * speedFactor;
           cell.progress = Math.min(100, cell.progress + step);
 
@@ -949,7 +1296,7 @@
       });
       if (plotChanged) renderPlots();
 
-      // 2. ฟื้นฟูพลังงานอัตโนมัติ (1.0 + 0.1*เลเวล ต่อนาที)
+      // 2. ฟื้นฟูพลังงานอัตโนมัติ
       const maxStam = getMaxStamina();
       const ratePerMin = getRegenPerMinute();
       const ratePerSec = ratePerMin / 60;
@@ -1048,7 +1395,7 @@
     document.getElementById("hud-name").innerText = gameState.playerName;
     document.getElementById("hud-gender").innerText = `(${gameState.gender})`;
     document.getElementById("hud-level").innerText = gameState.level;
-    
+
     const bonusPct = Math.round((getSkillEfficiency() - 1) * 100);
     document.getElementById("hud-bonus").innerText = bonusPct;
 
@@ -1067,14 +1414,14 @@
     if (gameState.equipments && gameState.equipments.length > 0) {
       eqContainer.innerHTML = gameState.equipments.map(id => {
         const item = EQUIPMENTS.find(e => e.id === id);
-        return item ? `<span class="eq-chip">${item.icon} ${item.name}</span>` : '';
+        return item ? `<span class="eq-chip" title="${item.desc}">${item.icon} ${item.name}</span>` : '';
       }).join("");
     } else {
       eqContainer.innerHTML = `<span style="font-size:0.72rem; color:#888;">ยังไม่มีอุปกรณ์สวมใส่</span>`;
     }
 
     // อัปเดตตัวเลขใช้พลังงานบนปุ่มตามอุปกรณ์
-    document.getElementById("btn-forage").innerText = `🌲 หาของป่า (-${hasEquip('boots') ? 4 : 6} ⚡)`;
+    document.getElementById("btn-forage").innerText = `🌲 หาของป่า (-${hasEquip('boots') ? 9 : 12} ⚡)`;
     document.getElementById("cost-harv-stam").innerText = hasEquip('gloves') ? 1 : 2;
 
     document.getElementById("hud-gold").innerText = gameState.gold.toLocaleString();
@@ -1087,6 +1434,7 @@
     document.getElementById("selected-seed-label").innerText = `${curSeed.name} (${curSeed.cost} บ.)`;
   }
 
+  // วาดแปลงผักแบบ 4 ระยะการเติบโต + เอฟเฟกต์น่ารัก
   function renderPlots() {
     const container = document.getElementById("plots-container");
     container.innerHTML = "";
@@ -1096,13 +1444,13 @@
       if (!gameState.unlockedZones[zIdx]) {
         zoneDiv.className = "plot-zone locked";
         zoneDiv.innerHTML = `
-          <div>🔒 <strong>${rule.title}</strong></div>
-          <div style="font-size:0.85rem; margin:6px 0;">เงื่อนไข: เลเวล ${rule.reqLv} | ค่าปลดล็อก ${rule.cost} บาท</div>
-          <button class="btn btn-warning" onclick="unlockZone(${zIdx})">ปลดล็อกแปลงนี้</button>
+          <div style="font-size:1.05rem;">🔒 <strong>${rule.title}</strong></div>
+          <div style="font-size:0.85rem; margin:6px 0 10px; color:#455a64;">เงื่อนไขปลดล็อก: เลเวล ${rule.reqLv} | ใช้เงินทุน ${rule.cost} บาท</div>
+          <button class="btn btn-warning" onclick="unlockZone(${zIdx})">🔓 ปลดล็อกแปลงนี้</button>
         `;
       } else {
         zoneDiv.className = "plot-zone";
-        zoneDiv.innerHTML = `<div class="zone-header"><span>🌱 ${rule.title}</span><span>(9 ช่องปลูก)</span></div>`;
+        zoneDiv.innerHTML = `<div class="zone-header"><span>🪧 ${rule.title}</span><span>🌿 แปลงไม้ยกขอบ</span></div>`;
         const grid = document.createElement("div");
         grid.className = "grid-3x3";
 
@@ -1114,25 +1462,44 @@
           cellEl.onclick = () => handleCellClick(cellIdx);
 
           if (!cell) {
-            cellEl.innerHTML = `<span style="font-size:1.3rem;">🟫</span><span class="crop-status">ดินว่าง</span>`;
+            cellEl.innerHTML = `
+              <span style="font-size:1.45rem; opacity:0.85;">🕳️</span>
+              <span class="crop-status" style="color:#efebe9;">หลุมดินว่าง</span>
+            `;
           } else {
             const seed = SEEDS.find(s => s.id === cell.seedId);
             const pct = Math.floor(cell.progress);
+
             if (pct >= 100) {
+              // ระยะที่ 4: โตเต็มวัยพร้อมเก็บเกี่ยวมีประกายวิบวับ
               cellEl.classList.add("ready");
               cellEl.innerHTML = `
-                ${cell.fertilized ? '<span class="fert-tag">ปุ๋ย</span>' : ''}
+                <span class="sparkle-badge">✨</span>
+                ${cell.fertilized ? '<span class="fert-tag">🧪 ปุ๋ย</span>' : ''}
                 <span class="crop-icon">${seed.icon}</span>
                 <span class="crop-name">${seed.name}</span>
-                <span class="crop-status">✨ พร้อมเก็บ!</span>
+                <span class="crop-status" style="color:#fff59d; font-weight:bold;">🧺 พร้อมเก็บเกี่ยว!</span>
               `;
             } else {
+              // ระยะที่ 1-3 ตามเปอร์เซ็นต์การเติบโต
               if (cell.watered) cellEl.classList.add("watered");
+              let stageIcon = '🫘';
+              let stageText = 'เมล็ดพันธุ์';
+              if (pct >= 65) {
+                stageIcon = '🌼';
+                stageText = 'ผลิดอกออกผล';
+              } else if (pct >= 25) {
+                stageIcon = '🌱';
+                stageText = 'ต้นอ่อนแตกใบ';
+              }
+
               cellEl.innerHTML = `
-                ${cell.fertilized ? '<span class="fert-tag">ปุ๋ย</span>' : ''}
-                <span class="crop-icon">${pct < 40 ? '🌱' : '🌿'}</span>
+                ${cell.fertilized ? '<span class="fert-tag">🧪 ปุ๋ย</span>' : ''}
+                ${cell.watered ? '<span class="water-drop-badge">💧</span>' : ''}
+                <span class="crop-icon">${stageIcon}</span>
                 <span class="crop-name">${seed.name} (${pct}%)</span>
-                <span class="crop-status">${cell.watered ? '💧 ชุ่มน้ำ' : '☀️ ดินแห้ง (โตช้า)'}</span>
+                <div class="mini-progress"><div class="mini-progress-fill" style="width:${pct}%"></div></div>
+                <span class="crop-status">${cell.watered ? '💦 ชุ่มน้ำ' : `☀️ ${stageText}`}</span>
               `;
             }
           }
@@ -1162,7 +1529,7 @@
               ${s.icon} <strong>${s.name}</strong> ${locked ? `<span style="color:#d84315; font-size:0.75rem;">(ปลดล็อก Lv.${s.reqLv})</span>` : ''}
               <br><small style="color:#666;">ขายพื้นฐาน ${s.baseSell} บ. | โต ${s.growTime} วิ | +${s.exp} EXP</small>
             </div>
-            <button class="btn ${isSelected ? 'btn-primary' : ''}" style="width:auto; padding:5px 10px;" 
+            <button class="btn ${isSelected ? 'btn-primary' : ''}" style="width:auto; padding:5px 10px;"
               ${locked ? 'disabled' : ''} onclick="selectSeedToPlant('${s.id}')">
               ${isSelected ? '✓ เลือกอยู่' : `เลือก (${s.cost} บ.)`}
             </button>
@@ -1171,7 +1538,7 @@
       });
       shopEl.innerHTML = html;
     } else {
-      // แท็บอุปกรณ์ตัวละครสุดแพง
+      // แท็บอุปกรณ์ตัวละคร 6 ชิ้น
       shopEl.innerHTML = EQUIPMENTS.map(eq => {
         const owned = hasEquip(eq.id);
         return `
@@ -1180,7 +1547,7 @@
               ${eq.icon} <strong>${eq.name}</strong>
               <br><small style="color:#555;">${eq.desc}</small>
             </div>
-            <button class="btn ${owned ? 'btn-primary' : 'btn-warning'}" style="width:auto; padding:6px 10px;" 
+            <button class="btn ${owned ? 'btn-primary' : 'btn-warning'}" style="width:auto; padding:6px 10px;"
               ${owned ? 'disabled' : ''} onclick="buyEquipment('${eq.id}')">
               ${owned ? '✓ มีแล้ว' : `${eq.cost.toLocaleString()} บ.`}
             </button>
