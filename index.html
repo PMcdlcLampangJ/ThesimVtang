@@ -44,7 +44,7 @@
 
     /* ฉากประกอบหน้าแรก (SVG Scene) */
     .hero-scene {
-      width: 100%; max-height: 175px; border-radius: 14px;
+      width: 100%; max-height: 170px; border-radius: 14px;
       overflow: hidden; border: 3px solid #8bc34a;
       margin-bottom: 14px; background: #b3e5fc;
       box-shadow: inset 0 0 12px rgba(0,0,0,0.1);
@@ -87,7 +87,7 @@
       border-radius: 8px; font-size: 0.95rem;
     }
     .btn {
-      border: none; border-radius: 8px; padding: 10px 16px; font-size: 0.95rem;
+      border: none; border-radius: 8px; padding: 10px 14px; font-size: 0.9rem;
       font-weight: bold; cursor: pointer; transition: 0.15s;
     }
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -97,9 +97,11 @@
     .btn-load:hover:not(:disabled) { background: #01579b; }
     .btn-secondary { background: #0277bd; color: white; }
     .btn-warning { background: var(--accent); color: white; }
+    .btn-forest { background: #00695c; color: white; }
+    .btn-forest:hover:not(:disabled) { background: #004d40; }
 
     /* โครงสร้างหลักของเกม */
-    #game-container { max-width: 1100px; margin: 0 auto; padding: 12px; display: none; }
+    #game-container { max-width: 1140px; margin: 0 auto; padding: 12px; display: none; }
     .top-banner {
       background: linear-gradient(90deg, #1b5e20, #388e3c); color: white;
       padding: 8px 16px; border-radius: 12px; margin-bottom: 10px;
@@ -115,24 +117,35 @@
     }
     .player-profile { display: flex; align-items: center; gap: 12px; }
     .player-avatar {
-      width: 56px; height: 56px; border-radius: 50%; background: #e8f5e9;
-      display: flex; align-items: center; justify-content: center; font-size: 2.2rem;
-      border: 2px solid var(--primary);
+      width: 60px; height: 60px; border-radius: 50%; background: #e8f5e9;
+      display: flex; align-items: center; justify-content: center; font-size: 2.3rem;
+      border: 2.5px solid var(--primary);
     }
-    .bars { width: 180px; }
+    .bars { width: 215px; }
     .bar-wrap { background: #eceff1; height: 10px; border-radius: 6px; overflow: hidden; margin-top: 3px; }
     .bar-fill { height: 100%; transition: width 0.3s; }
     .exp-fill { background: #fbc02d; }
     .stam-fill { background: #039be5; }
-    .stats-badges { display: flex; flex-wrap: wrap; gap: 8px; }
+    .regen-note {
+      font-size: 0.72rem; color: #0277bd; margin-top: 3px; font-weight: bold;
+    }
+    .equip-badges {
+      display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap;
+    }
+    .eq-chip {
+      background: #fff3e0; border: 1px solid #ffb74d; color: #e65100;
+      font-size: 0.72rem; padding: 2px 6px; border-radius: 6px; font-weight: bold;
+    }
+
+    .stats-badges { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
     .badge {
       background: #f1f8e9; border: 1px solid #c5e1a5; padding: 6px 12px;
       border-radius: 20px; font-weight: bold; font-size: 0.9rem;
     }
 
     /* พื้นที่เล่นเกม 2 คอลัมน์ */
-    .main-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 14px; }
-    @media (max-width: 820px) { .main-grid { grid-template-columns: 1fr; } }
+    .main-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 14px; }
+    @media (max-width: 860px) { .main-grid { grid-template-columns: 1fr; } }
 
     .panel {
       background: var(--card); border-radius: 14px; padding: 16px;
@@ -143,8 +156,9 @@
     /* แถบเครื่องมือ */
     .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
     .tool-btn {
-      flex: 1; min-width: 105px; padding: 10px 8px; border: 2px solid #cfd8dc;
+      flex: 1; min-width: 100px; padding: 9px 6px; border: 2px solid #cfd8dc;
       border-radius: 10px; background: white; cursor: pointer; font-weight: bold; text-align: center;
+      font-size: 0.85rem;
     }
     .tool-btn.active { border-color: var(--accent); background: #fff8e1; transform: translateY(-2px); }
 
@@ -159,7 +173,7 @@
     .zone-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
     .grid-3x3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
     .cell {
-      aspect-ratio: 1 / 0.95; background: var(--soil-dry); border-radius: 10px;
+      aspect-ratio: 1 / 0.92; background: var(--soil-dry); border-radius: 10px;
       color: white; display: flex; flex-direction: column; align-items: center;
       justify-content: center; cursor: pointer; padding: 6px; text-align: center;
       position: relative; transition: 0.15s; user-select: none;
@@ -176,13 +190,21 @@
     }
 
     /* ร้านค้า & ตะกร้าขายของ */
+    .shop-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+    .shop-tab-btn {
+      flex: 1; padding: 6px; border: 1.5px solid #cfd8dc; border-radius: 8px;
+      background: #f5f5f5; font-weight: bold; cursor: pointer; font-size: 0.85rem;
+    }
+    .shop-tab-btn.active { background: #e8f5e9; border-color: var(--primary); color: var(--primary); }
+
     .shop-item, .inv-item {
       display: flex; justify-content: space-between; align-items: center;
-      padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem;
+      padding: 8px 0; border-bottom: 1px solid #f0f0f0; font-size: 0.88rem; gap: 8px;
     }
     .quality-1 { color: #546e7a; }
     .quality-2 { color: #0277bd; font-weight: bold; }
     .quality-3 { color: #d84315; font-weight: bold; }
+    .quality-wild { color: #00695c; font-weight: bold; }
 
     /* ตารางอันดับ */
     table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
@@ -191,7 +213,7 @@
     .toast {
       position: fixed; bottom: 16px; right: 16px; background: #263238; color: white;
       padding: 10px 18px; border-radius: 8px; font-size: 0.9rem; opacity: 0;
-      transition: opacity 0.3s; pointer-events: none; z-index: 200;
+      transition: opacity 0.3s; pointer-events: none; z-index: 200; max-width: 340px;
     }
     .toast.show { opacity: 1; }
   </style>
@@ -202,9 +224,9 @@
 <div id="login-screen">
   <div class="login-box">
     <div class="game-title">🏡 เดอะซิมส์ ภาคพิสดาร ตางค์</div>
-    <div class="game-subtitle">✨ ศึกเกษตรกรป่วนฟาร์ม หาตางค์สร้างตัว ✨</div>
+    <div class="game-subtitle">🔥 โหมดชีวิตจริงสุดโหด: ผักโตช้า • หาของป่า • ไอเทมลับ 🔥</div>
 
-    <!-- ฉากการ์ตูน SVG: เกษตรกรหญิงใส่แว่นท่าทางตลก + ชาวบ้านคึกคักด้านหลัง -->
+    <!-- ฉากการ์ตูน SVG -->
     <div class="hero-scene">
       <svg viewBox="0 0 460 175" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <rect width="460" height="175" fill="#81d4fa"/>
@@ -338,7 +360,7 @@
     <!-- ฟอร์ม 2: โหลดเซฟเดิม -->
     <div id="panel-load" style="display:none;">
       <div style="background:#e1f5fe; padding:12px; border-radius:10px; font-size:0.85rem; color:#01579b; margin-bottom:12px;">
-        💡 กรอก <strong>รหัสผู้เล่น (ID)</strong> ที่เคยลงทะเบียนไว้ เพื่อดึงข้อมูลเลเวล เงินทุน และแปลงผักกลับมาเล่นต่อ
+        💡 กรอก <strong>รหัสผู้เล่น (ID)</strong> ที่เคยลงทะเบียนไว้ เพื่อดึงข้อมูลเลเวล เงินทุน พลังงานที่ค้างไว้ และแปลงผักกลับมาเล่นต่อ
       </div>
       <div style="text-align:left; font-weight:bold; font-size:0.85rem;">รหัสผู้เล่น (ID) ของคุณ:</div>
       <input type="text" id="load-id" placeholder="กรอกรหัสผู้เล่นที่เคยบันทึกไว้..." />
@@ -369,15 +391,18 @@
           <div class="bar-wrap"><div class="bar-fill exp-fill" id="bar-exp" style="width:0%"></div></div>
           <div style="font-size:0.75rem; margin-top:4px;">⚡ พลังงาน: <span id="hud-stam">30</span> / <span id="hud-max-stam">30</span></div>
           <div class="bar-wrap"><div class="bar-fill stam-fill" id="bar-stam" style="width:100%"></div></div>
+          <div class="regen-note" id="regen-status">🔋 ฟื้นฟู +1.0 ⚡/นาที (อีก 60 วิ)</div>
         </div>
+        <div class="equip-badges" id="hud-equips"></div>
       </div>
     </div>
 
     <div class="stats-badges">
       <div class="badge">💰 เงินทุน: <span id="hud-gold">60</span> บ.</div>
       <div class="badge">🏆 คะแนน: <span id="hud-score">0</span></div>
-      <div class="badge">🧺 เก็บเกี่ยว: <span id="hud-harvested">0</span> ต้น</div>
-      <button class="btn btn-warning" onclick="restPlayer()">💤 พักผ่อน (+พลังงาน)</button>
+      <div class="badge">🧺 เก็บเกี่ยว: <span id="hud-harvested">0</span></div>
+      <button class="btn btn-forest" onclick="forageForest()" id="btn-forage">🌲 หาของป่า (-6 ⚡)</button>
+      <button class="btn btn-warning" onclick="restPlayer()">💤 พักผ่อน (จ่าย 50 บ.)</button>
       <button class="btn btn-secondary" id="btn-save" onclick="saveToCloud()">☁️ บันทึกเซฟ</button>
     </div>
   </div>
@@ -389,16 +414,16 @@
         <h3>🛠️ เลือกการกระทำ (คลิกที่ช่องดินเพื่อใช้งาน)</h3>
         <div class="toolbar">
           <button class="tool-btn active" id="tool-plant" onclick="setTool('plant')">
-            🌱 ปลูกเมล็ด<br><small id="selected-seed-label">ผักบุ้งจีน (10 บ.)</small>
+            🌱 ปลูกเมล็ด (<span id="cost-plant-stam">1</span> ⚡)<br><small id="selected-seed-label">ผักบุ้งจีน (10 บ.)</small>
           </button>
           <button class="tool-btn" id="tool-water" onclick="setTool('water')">
-            💧 รดน้ำ (-2 ⚡)<br><small>โตไวปกติ +คุณภาพ</small>
+            💧 รดน้ำ (-2 ⚡)<br><small>โตปกติ +คุณภาพ</small>
           </button>
           <button class="tool-btn" id="tool-fert" onclick="setTool('fert')">
             🧪 ใส่ปุ๋ย (-3 ⚡)<br><small>มีปุ๋ย: <span id="fert-count">1</span> ถุง</small>
           </button>
           <button class="tool-btn" id="tool-harvest" onclick="setTool('harvest')">
-            🧺 เก็บเกี่ยว (-2 ⚡)<br><small>เก็บผักเข้าตะกร้า</small>
+            🧺 เก็บเกี่ยว (-<span id="cost-harv-stam">2</span> ⚡)<br><small>เก็บผักเข้าตะกร้า</small>
           </button>
         </div>
 
@@ -406,12 +431,12 @@
       </div>
     </div>
 
-    <!-- คอลัมน์ขวา: ร้านค้า, ตะกร้าขายผัก, สถิติอันดับ -->
+    <!-- คอลัมน์ขวา: ร้านค้า/อุปกรณ์, ตะกร้าขายผัก, สถิติอันดับ -->
     <div>
       <!-- ตะกร้าผลผลิต -->
       <div class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center;">
-          <h3 style="border:none; margin:0;">🛒 ตะกร้าผลผลิต (รอขาย)</h3>
+          <h3 style="border:none; margin:0;">🛒 ตะกร้าผลผลิต & ของป่า</h3>
           <button class="btn btn-primary" style="width:auto; padding:6px 12px; font-size:0.85rem;" onclick="sellAllProduce()">💰 ขายทั้งหมด</button>
         </div>
         <div id="inventory-list" style="margin-top:8px; max-height:180px; overflow-y:auto;">
@@ -419,9 +444,13 @@
         </div>
       </div>
 
-      <!-- ร้านค้าเมล็ดพันธุ์และปุ๋ย -->
+      <!-- ร้านค้าเมล็ดพันธุ์ และ อุปกรณ์ตัวละคร -->
       <div class="panel">
-        <h3>🏪 ร้านค้าเกษตร</h3>
+        <h3>🏪 ตลาดหมู่บ้านตางค์</h3>
+        <div class="shop-tabs">
+          <button class="shop-tab-btn active" id="stab-seeds" onclick="switchShopTab('seeds')">🌱 เมล็ดพันธุ์ & ปุ๋ย</button>
+          <button class="shop-tab-btn" id="stab-equips" onclick="switchShopTab('equips')">🎒 อุปกรณ์ตัวละคร (แรร์)</button>
+        </div>
         <div id="shop-list"></div>
       </div>
 
@@ -452,12 +481,29 @@
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxy5pVYAz0Fj9A56j5vcWwkNVgc9oWnDOk2jeLS03WJKs_PYJaSWabJuzx8GSTvHQNy/exec";
 
+  // ปรับเวลาโตให้นานขึ้น (ยากขึ้น)
   const SEEDS = [
-    { id: 'morning_glory', name: 'ผักบุ้งจีน', icon: '🥬', cost: 10, baseSell: 18, growTime: 18, exp: 12, reqLv: 1 },
-    { id: 'kale', name: 'คะน้าฮ่องกง', icon: '🥦', cost: 25, baseSell: 48, growTime: 35, exp: 28, reqLv: 1 },
-    { id: 'chili', name: 'พริกจินดา', icon: '🌶️', cost: 55, baseSell: 110, growTime: 60, exp: 60, reqLv: 2 },
-    { id: 'strawberry', name: 'สตรอว์เบอร์รี', icon: '🍓', cost: 120, baseSell: 250, growTime: 95, exp: 130, reqLv: 3 },
-    { id: 'melon', name: 'เมล่อนญี่ปุ่น', icon: '🍈', cost: 260, baseSell: 560, growTime: 140, exp: 290, reqLv: 4 }
+    { id: 'morning_glory', name: 'ผักบุ้งจีน', icon: '🥬', cost: 10, baseSell: 19, growTime: 45, exp: 12, reqLv: 1 },
+    { id: 'kale', name: 'คะน้าฮ่องกง', icon: '🥦', cost: 25, baseSell: 50, growTime: 85, exp: 28, reqLv: 1 },
+    { id: 'chili', name: 'พริกจินดา', icon: '🌶️', cost: 55, baseSell: 115, growTime: 140, exp: 60, reqLv: 2 },
+    { id: 'strawberry', name: 'สตรอว์เบอร์รี', icon: '🍓', cost: 120, baseSell: 260, growTime: 220, exp: 130, reqLv: 3 },
+    { id: 'melon', name: 'เมล่อนญี่ปุ่น', icon: '🍈', cost: 260, baseSell: 590, growTime: 320, exp: 290, reqLv: 4 }
+  ];
+
+  // รายการของป่าที่สุ่มหาได้โดยไม่ต้องปลูก
+  const WILD_ITEMS = [
+    { name: 'ผักหวานป่า', icon: '🌿', price: 16, weight: 40 },
+    { name: 'หน่อไม้ไผ่ตง', icon: '🎍', price: 28, weight: 30 },
+    { name: 'เห็ดโคนธรรมชาติ', icon: '🍄', price: 48, weight: 18 },
+    { name: 'น้ำผึ้งเดือนห้า', icon: '🍯', price: 85, weight: 9 },
+    { name: 'โสมป่าพันปี', icon: '🫚', price: 160, weight: 3 }
+  ];
+
+  // อุปกรณ์สวมใส่ราคาสูง (ซื้อได้หรือดรอปจากป่า)
+  const EQUIPMENTS = [
+    { id: 'gloves', name: 'ถุงมือเกษตรกรโปร', icon: '🧤', cost: 450, desc: 'ลดพลังงานปลูก & เก็บเกี่ยว -1 ⚡' },
+    { id: 'can', name: 'บัวรดน้ำทองคำ', icon: '🚿', cost: 850, desc: 'รดน้ำ & ใส่ปุ๋ยแรงขึ้น +25%' },
+    { id: 'boots', name: 'รองเท้าเดินป่าสายฟ้า', icon: '🥾', cost: 1200, desc: 'หาของป่าใช้แค่ 4 ⚡ & เพิ่มโอกาสได้ของแรร์' }
   ];
 
   const PLOT_UNLOCK_RULES = [
@@ -477,16 +523,19 @@
     totalHarvested: 0,
     totalEarned: 0,
     stamina: 30,
+    regenBuffer: 0, // เก็บเศษทศนิยมของพลังงานที่กำลังฟื้นฟู
     fertilizer: 1,
     selectedSeedId: "morning_glory",
     unlockedZones: [true, false, false],
     cells: Array(27).fill(null),
-    inventory: []
+    inventory: [],
+    equipments: [] // เก็บ id ของอุปกรณ์ที่มี เช่น ['gloves', 'can']
   };
 
   let currentTool = "plant";
+  let currentShopTab = "seeds";
+  let loopStarted = false;
 
-  // สลับแท็บ สร้างใหม่ / โหลดเซฟเดิม
   function switchAuthTab(mode) {
     document.getElementById("login-status").innerText = "";
     document.getElementById("tab-new").classList.toggle("active", mode === "new");
@@ -505,14 +554,28 @@
     const t = document.getElementById("toast");
     t.innerText = msg;
     t.classList.add("show");
-    setTimeout(() => t.classList.remove("show"), 2600);
+    setTimeout(() => t.classList.remove("show"), 3200);
+  }
+
+  function hasEquip(eqId) {
+    return Array.isArray(gameState.equipments) && gameState.equipments.includes(eqId);
   }
 
   function getMaxStamina() { return 30 + (gameState.level - 1) * 10; }
   function getRequiredExp() { return Math.pow(gameState.level, 2) * 150; }
-  function getSkillEfficiency() { return 1 + (gameState.level - 1) * 0.12; }
+  
+  function getSkillEfficiency() {
+    let base = 1 + (gameState.level - 1) * 0.12;
+    if (hasEquip('can')) base += 0.25; // บัวรดน้ำทองคำ +25%
+    return base;
+  }
 
-  // 1. สร้างตัวละครใหม่ (เช็กก่อนว่ารหัสซ้ำไหม)
+  // อัตราฟื้นฟูพลังงานต่อนาที: 1.0 + 0.1 ต่อเลเวล
+  function getRegenPerMinute() {
+    return 1.0 + (gameState.level - 1) * 0.1;
+  }
+
+  // 1. สร้างตัวละครใหม่
   async function createNewCharacter() {
     const id = document.getElementById("new-id").value.trim();
     const name = document.getElementById("new-name").value.trim();
@@ -535,7 +598,7 @@
 
       if (data.found) {
         statusEl.style.color = "#d84315";
-        statusEl.innerText = `❌ รหัส "${id}" มีตัวละครชื่อ "${data.playerName}" อยู่แล้ว! กรุณากดแท็บ 'โหลดเซฟเดิมเล่นต่อ' หรือตั้งรหัสใหม่`;
+        statusEl.innerText = `❌ รหัส "${id}" มีตัวละครชื่อ "${data.playerName}" อยู่แล้ว! กรุณากดแท็บ 'โหลดเซฟเดิมเล่นต่อ'`;
         btn.disabled = false;
         return;
       }
@@ -543,18 +606,19 @@
       gameState.playerId = id;
       gameState.playerName = name;
       gameState.stamina = getMaxStamina();
+      gameState.regenBuffer = 0;
 
       enterGameScreen();
       showToast(`สร้างตัวละคร "${name}" สำเร็จ! เริ่มต้นด้วยทุน 60 บาท`);
       saveToCloud(true);
     } catch (err) {
       statusEl.style.color = "#d84315";
-      statusEl.innerText = "❌ เชื่อมต่อฐานข้อมูลไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตหรือการ Deploy";
+      statusEl.innerText = "❌ เชื่อมต่อฐานข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
       btn.disabled = false;
     }
   }
 
-  // 2. โหลดเซฟเดิมเล่นต่อ
+  // 2. โหลดเซฟเดิมเล่นต่อ (ล็อกค่าพลังงานตามเดิมที่เล่นค้างไว้)
   async function loadExistingCharacter() {
     const id = document.getElementById("load-id").value.trim();
     const statusEl = document.getElementById("login-status");
@@ -592,18 +656,21 @@
       gameState.totalEarned = data.totalEarned;
 
       if (data.saveData) {
-        gameState.stamina = data.saveData.stamina ?? getMaxStamina();
+        // ล็อกค่าพลังงานตามที่บันทึกไว้ล่าสุด (ไม่รีเซ็ตเต็ม)
+        gameState.stamina = typeof data.saveData.stamina === 'number' ? data.saveData.stamina : getMaxStamina();
+        gameState.regenBuffer = typeof data.saveData.regenBuffer === 'number' ? data.saveData.regenBuffer : 0;
         gameState.fertilizer = data.saveData.fertilizer ?? 0;
         gameState.unlockedZones = data.saveData.unlockedZones ?? [true, false, false];
         gameState.cells = data.saveData.cells ?? Array(27).fill(null);
         gameState.inventory = data.saveData.inventory ?? [];
+        gameState.equipments = data.saveData.equipments ?? [];
       }
 
       enterGameScreen();
-      showToast(`🎉 โหลดเซฟสำเร็จ! ยินดีต้อนรับกลับ คุณ${gameState.playerName}`);
+      showToast(`🎉 โหลดเซฟสำเร็จ! พลังงานคงเหลือ ${gameState.stamina}/${getMaxStamina()} ⚡`);
     } catch (err) {
       statusEl.style.color = "#d84315";
-      statusEl.innerText = "❌ โหลดข้อมูลไม่สำเร็จ (ตรวจสอบว่า Deploy Apps Script เป็น New version แล้ว)";
+      statusEl.innerText = "❌ โหลดข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
       btn.disabled = false;
     }
   }
@@ -612,7 +679,10 @@
     document.getElementById("login-screen").style.display = "none";
     document.getElementById("game-container").style.display = "block";
     document.getElementById("banner-id").innerText = gameState.playerId;
-    initGameLoop();
+    if (!loopStarted) {
+      initGameLoop();
+      loopStarted = true;
+    }
     renderAll();
     loadLeaderboard();
   }
@@ -621,6 +691,13 @@
     currentTool = tool;
     document.querySelectorAll(".tool-btn").forEach(b => b.classList.remove("active"));
     document.getElementById(`tool-${tool}`).classList.add("active");
+  }
+
+  function switchShopTab(tab) {
+    currentShopTab = tab;
+    document.getElementById("stab-seeds").classList.toggle("active", tab === "seeds");
+    document.getElementById("stab-equips").classList.toggle("active", tab === "equips");
+    renderShop();
   }
 
   function selectSeedToPlant(seedId) {
@@ -637,12 +714,84 @@
     renderAll();
   }
 
+  function buyEquipment(eqId) {
+    const eq = EQUIPMENTS.find(e => e.id === eqId);
+    if (!eq) return;
+    if (hasEquip(eqId)) return showToast("คุณมีอุปกรณ์ชิ้นนี้อยู่แล้ว");
+    if (gameState.gold < eq.cost) return showToast(`เงินไม่พอ! ต้องการ ${eq.cost.toLocaleString()} บาท`);
+
+    gameState.gold -= eq.cost;
+    gameState.equipments.push(eqId);
+    showToast(`🎉 ซื้อ "${eq.name}" สำเร็จ! ติดตั้งความสามารถให้ตัวละครแล้ว`);
+    renderAll();
+    saveToCloud(true);
+  }
+
+  // พักผ่อน: มีค่าใช้จ่าย 50 บาท พร้อมแจ้งเตือน
   function restPlayer() {
     const maxStam = getMaxStamina();
-    if (gameState.stamina >= maxStam) return showToast("พลังงานเต็มอยู่แล้ว!");
+    if (gameState.stamina >= maxStam) {
+      return showToast("⚡ พลังงานเต็มอยู่แล้ว ไม่จำเป็นต้องเสียเงินพักผ่อน!");
+    }
+    if (gameState.gold < 50) {
+      return showToast("❌ เงินไม่พอค่าพักผ่อน (ต้องใช้ 50 บาท) รอพลังงานฟื้นฟูเองนะ!");
+    }
+
+    gameState.gold -= 50;
     const recover = Math.ceil(maxStam * 0.5);
     gameState.stamina = Math.min(maxStam, gameState.stamina + recover);
-    showToast(`พักผ่อนเรียบร้อย ฟื้นฟูพลังงาน +${recover} ⚡`);
+    showToast(`💸 เสียเงินค่าพักผ่อน 50 บาท! ฟื้นฟูพลังงาน +${recover} ⚡`);
+    renderAll();
+  }
+
+  // คำสั่งหาของป่าขาย (ได้ของป่าเข้าตะกร้า + EXP เล็กน้อย + ลุ้นอุปกรณ์แรร์)
+  function forageForest() {
+    const stamCost = hasEquip('boots') ? 4 : 6;
+    if (gameState.stamina < stamCost) {
+      return showToast(`⚡ พลังงานไม่พอเข้าป่า (ต้องใช้ ${stamCost} ⚡)`);
+    }
+
+    gameState.stamina -= stamCost;
+    const gainedExp = 4 + Math.floor(gameState.level * 0.5);
+    gameState.exp += gainedExp;
+
+    // โอกาส 4% (หรือ 8% ถ้าใส่รองเท้าเดินป่า) ที่จะเจออุปกรณ์ตัวละครหล่นอยู่กลางป่า!
+    const rareChance = hasEquip('boots') ? 0.08 : 0.04;
+    const unownedEquips = EQUIPMENTS.filter(e => !hasEquip(e.id));
+
+    if (unownedEquips.length > 0 && Math.random() < rareChance) {
+      const foundEq = unownedEquips[Math.floor(Math.random() * unownedEquips.length)];
+      gameState.equipments.push(foundEq.id);
+      checkLevelUp();
+      showToast(`🎁 โชคหล่นทับ! เดินป่าเจอ "${foundEq.icon} ${foundEq.name}" ฟรี! (+${gainedExp} EXP)`);
+      renderAll();
+      saveToCloud(true);
+      return;
+    }
+
+    // สุ่มของป่าตามน้ำหนัก
+    const bonusRarity = hasEquip('boots') ? 15 : 0;
+    let roll = Math.random() * 100 - bonusRarity;
+    let chosen = WILD_ITEMS[0];
+    let acc = 0;
+    for (const item of WILD_ITEMS) {
+      acc += item.weight;
+      if (roll <= acc) {
+        chosen = item;
+        break;
+      }
+    }
+
+    gameState.inventory.push({
+      name: chosen.name,
+      icon: chosen.icon,
+      quality: 'wild',
+      qualityLabel: 'ของป่าธรรมชาติ',
+      price: chosen.price
+    });
+
+    checkLevelUp();
+    showToast(`🌲 หาของป่าได้ "${chosen.icon} ${chosen.name}" เข้าตะกร้าขาย! (+${gainedExp} EXP)`);
     renderAll();
   }
 
@@ -663,12 +812,13 @@
     if (currentTool === "plant") {
       if (cell) return showToast("ช่องนี้มีต้นผักอยู่แล้ว");
       const seed = SEEDS.find(s => s.id === gameState.selectedSeedId);
+      const plantCost = hasEquip('gloves') ? 1 : 1; // ขั้นต่ำ 1 หน่วย
       if (gameState.level < seed.reqLv) return showToast(`ต้องเลเวล ${seed.reqLv} จึงจะปลูก${seed.name}ได้`);
       if (gameState.gold < seed.cost) return showToast(`เงินไม่พอซื้อเมล็ด${seed.name} (${seed.cost} บ.)`);
-      if (gameState.stamina < 1) return showToast("พลังงานหมด! กดปุ่มพักผ่อนก่อน");
+      if (gameState.stamina < plantCost) return showToast("พลังงานหมด! รอฟื้นฟูหรือกดพักผ่อน");
 
       gameState.gold -= seed.cost;
-      gameState.stamina -= 1;
+      gameState.stamina -= plantCost;
       gameState.cells[cellIdx] = {
         seedId: seed.id,
         progress: 0,
@@ -687,8 +837,8 @@
       gameState.stamina -= 2;
       cell.watered = true;
       cell.careScore += 1 * getSkillEfficiency();
-      cell.progress = Math.min(100, cell.progress + (4 * getSkillEfficiency()));
-      showToast("💧 รดน้ำแล้ว ผักสดชื่นโตไวขึ้น!");
+      cell.progress = Math.min(100, cell.progress + (3 * getSkillEfficiency()));
+      showToast("💧 รดน้ำแล้ว ผักโตตามความเร็วปกติ!");
       renderPlots();
       updateHUD();
     } else if (currentTool === "fert") {
@@ -701,7 +851,7 @@
       gameState.fertilizer -= 1;
       gameState.stamina -= 3;
       cell.fertilized = true;
-      const boost = Math.min(65, Math.round(30 * getSkillEfficiency()));
+      const boost = Math.min(60, Math.round(25 * getSkillEfficiency()));
       cell.progress = Math.min(100, cell.progress + boost);
       cell.careScore += 2 * getSkillEfficiency();
       showToast(`🧪 ใส่ปุ๋ยสำเร็จ! เร่งโตทันที +${boost}%`);
@@ -710,9 +860,10 @@
     } else if (currentTool === "harvest") {
       if (!cell) return showToast("ไม่มีผักให้เก็บเกี่ยว");
       if (cell.progress < 100) return showToast("ผักยังไม่โตเต็มที่ รออีกนิด!");
-      if (gameState.stamina < 2) return showToast("พลังงานไม่พอ (ใช้ 2 ⚡)");
+      const harvCost = hasEquip('gloves') ? 1 : 2;
+      if (gameState.stamina < harvCost) return showToast(`พลังงานไม่พอ (ใช้ ${harvCost} ⚡)`);
 
-      gameState.stamina -= 2;
+      gameState.stamina -= harvCost;
       const seed = SEEDS.find(s => s.id === cell.seedId);
 
       let quality = 1;
@@ -752,7 +903,7 @@
   }
 
   function sellAllProduce() {
-    if (gameState.inventory.length === 0) return showToast("ไม่มีผักในตะกร้าให้ขาย");
+    if (gameState.inventory.length === 0) return showToast("ไม่มีสินค้าในตะกร้าให้ขาย");
     let totalMoney = 0;
     gameState.inventory.forEach(item => totalMoney += item.price);
     const count = gameState.inventory.length;
@@ -762,7 +913,7 @@
     gameState.score += Math.round(totalMoney * 0.5);
     gameState.inventory = [];
 
-    showToast(`💰 ขายผัก ${count} รายการ รับเงินสด +${totalMoney} บาท!`);
+    showToast(`💰 ขายสินค้า ${count} รายการ รับเงินสด +${totalMoney} บาท!`);
     renderAll();
     saveToCloud(true);
   }
@@ -773,28 +924,53 @@
       gameState.exp -= req;
       gameState.level += 1;
       gameState.stamina = getMaxStamina();
-      alert(`🎉 ยินดีด้วย! คุณเลื่อนระดับเป็น เลเวล ${gameState.level}\n- พลังงานสูงสุดเพิ่มขึ้นเป็น ${getMaxStamina()}\n- ประสิทธิภาพการรดน้ำ/ใส่ปุ๋ยเพิ่มขึ้น +12%`);
+      alert(`🎉 ยินดีด้วย! คุณเลื่อนระดับเป็น เลเวล ${gameState.level}\n- พลังงานสูงสุดเพิ่มขึ้นเป็น ${getMaxStamina()}\n- อัตราฟื้นฟูพลังงานเพิ่มเป็น ${getRegenPerMinute().toFixed(1)} ⚡/นาที`);
       req = getRequiredExp();
     }
   }
 
+  // Loop ทำงานทุก 1 วินาที: ผักโต + ฟื้นฟูพลังงานทีละนิด
   function initGameLoop() {
     setInterval(() => {
-      let changed = false;
+      // 1. การเติบโตของผัก
+      let plotChanged = false;
       gameState.cells.forEach(cell => {
         if (cell && cell.progress < 100) {
           const seed = SEEDS.find(s => s.id === cell.seedId);
-          const speedFactor = cell.watered ? 1.0 : 0.4;
+          const speedFactor = cell.watered ? 1.0 : 0.35; // ไม่รดน้ำโตช้ามาก (35%)
           const step = (100 / seed.growTime) * speedFactor;
           cell.progress = Math.min(100, cell.progress + step);
 
-          if (cell.watered && Math.random() < 0.08) {
+          if (cell.watered && Math.random() < 0.06) {
             cell.watered = false;
           }
-          changed = true;
+          plotChanged = true;
         }
       });
-      if (changed) renderPlots();
+      if (plotChanged) renderPlots();
+
+      // 2. ฟื้นฟูพลังงานอัตโนมัติ (1.0 + 0.1*เลเวล ต่อนาที)
+      const maxStam = getMaxStamina();
+      const ratePerMin = getRegenPerMinute();
+      const ratePerSec = ratePerMin / 60;
+      const regenEl = document.getElementById("regen-status");
+
+      if (gameState.stamina < maxStam) {
+        gameState.regenBuffer += ratePerSec;
+        if (gameState.regenBuffer >= 1) {
+          const gained = Math.floor(gameState.regenBuffer);
+          gameState.regenBuffer -= gained;
+          gameState.stamina = Math.min(maxStam, gameState.stamina + gained);
+          updateHUD();
+          regenEl.innerText = `✨ ฟื้นฟูพลังงาน +${gained} ⚡ แล้ว! (${ratePerMin.toFixed(1)}/นาที)`;
+        } else {
+          const remainSec = Math.ceil((1 - gameState.regenBuffer) / ratePerSec);
+          regenEl.innerText = `🔋 ฟื้นฟู +${ratePerMin.toFixed(1)} ⚡/นาที (อีก ${remainSec} วิ ได้ +1 ⚡)`;
+        }
+      } else {
+        gameState.regenBuffer = 0;
+        regenEl.innerText = `⚡ พลังงานเต็มแล้ว (อัตราฟื้นฟู ${ratePerMin.toFixed(1)}/นาที)`;
+      }
     }, 1000);
   }
 
@@ -815,10 +991,12 @@
       totalEarned: gameState.totalEarned,
       saveData: {
         stamina: gameState.stamina,
+        regenBuffer: gameState.regenBuffer,
         fertilizer: gameState.fertilizer,
         unlockedZones: gameState.unlockedZones,
         cells: gameState.cells,
-        inventory: gameState.inventory
+        inventory: gameState.inventory,
+        equipments: gameState.equipments
       }
     };
 
@@ -827,7 +1005,7 @@
         method: "POST",
         body: JSON.stringify(payload)
       });
-      if (!silent) showToast("☁️ บันทึกสถิติและความคืบหน้าเรียบร้อย!");
+      if (!silent) showToast("☁️ บันทึกสถิติและค่าพลังงานปัจจุบันเรียบร้อย!");
       loadLeaderboard();
     } catch (e) {
       if (!silent) showToast("⚠️ บันทึกไม่สำเร็จ กรุณาลองใหม่");
@@ -870,7 +1048,9 @@
     document.getElementById("hud-name").innerText = gameState.playerName;
     document.getElementById("hud-gender").innerText = `(${gameState.gender})`;
     document.getElementById("hud-level").innerText = gameState.level;
-    document.getElementById("hud-bonus").innerText = (gameState.level - 1) * 12;
+    
+    const bonusPct = Math.round((getSkillEfficiency() - 1) * 100);
+    document.getElementById("hud-bonus").innerText = bonusPct;
 
     const reqExp = getRequiredExp();
     const maxStam = getMaxStamina();
@@ -881,6 +1061,21 @@
     document.getElementById("hud-stam").innerText = gameState.stamina;
     document.getElementById("hud-max-stam").innerText = maxStam;
     document.getElementById("bar-stam").style.width = `${(gameState.stamina / maxStam) * 100}%`;
+
+    // แสดงอุปกรณ์ที่สวมใส่อยู่
+    const eqContainer = document.getElementById("hud-equips");
+    if (gameState.equipments && gameState.equipments.length > 0) {
+      eqContainer.innerHTML = gameState.equipments.map(id => {
+        const item = EQUIPMENTS.find(e => e.id === id);
+        return item ? `<span class="eq-chip">${item.icon} ${item.name}</span>` : '';
+      }).join("");
+    } else {
+      eqContainer.innerHTML = `<span style="font-size:0.72rem; color:#888;">ยังไม่มีอุปกรณ์สวมใส่</span>`;
+    }
+
+    // อัปเดตตัวเลขใช้พลังงานบนปุ่มตามอุปกรณ์
+    document.getElementById("btn-forage").innerText = `🌲 หาของป่า (-${hasEquip('boots') ? 4 : 6} ⚡)`;
+    document.getElementById("cost-harv-stam").innerText = hasEquip('gloves') ? 1 : 2;
 
     document.getElementById("hud-gold").innerText = gameState.gold.toLocaleString();
     document.getElementById("hud-score").innerText = gameState.score.toLocaleString();
@@ -951,35 +1146,54 @@
 
   function renderShop() {
     const shopEl = document.getElementById("shop-list");
-    let html = `
-      <div class="shop-item">
-        <div>🧪 <strong>ปุ๋ยอินทรีย์เร่งโต</strong><br><small style="color:#666;">เร่งโต +30% และเพิ่มโอกาสได้ผักพรีเมียม</small></div>
-        <button class="btn btn-warning" style="padding:5px 10px;" onclick="buyFertilizer()">ซื้อ 15 บ.</button>
-      </div>
-    `;
-    SEEDS.forEach(s => {
-      const locked = gameState.level < s.reqLv;
-      const isSelected = gameState.selectedSeedId === s.id;
-      html += `
+    if (currentShopTab === "seeds") {
+      let html = `
         <div class="shop-item">
-          <div>
-            ${s.icon} <strong>${s.name}</strong> ${locked ? `<span style="color:#d84315; font-size:0.75rem;">(ปลดล็อก Lv.${s.reqLv})</span>` : ''}
-            <br><small style="color:#666;">ขายพื้นฐาน ${s.baseSell} บ. | โต ${s.growTime} วิ | +${s.exp} EXP</small>
-          </div>
-          <button class="btn ${isSelected ? 'btn-primary' : ''}" style="width:auto; padding:5px 10px;" 
-            ${locked ? 'disabled' : ''} onclick="selectSeedToPlant('${s.id}')">
-            ${isSelected ? '✓ เลือกอยู่' : `เลือก (${s.cost} บ.)`}
-          </button>
+          <div>🧪 <strong>ปุ๋ยอินทรีย์เร่งโต</strong><br><small style="color:#666;">เร่งโต +25% และเพิ่มโอกาสได้ผักพรีเมียม</small></div>
+          <button class="btn btn-warning" style="padding:5px 10px;" onclick="buyFertilizer()">ซื้อ 15 บ.</button>
         </div>
       `;
-    });
-    shopEl.innerHTML = html;
+      SEEDS.forEach(s => {
+        const locked = gameState.level < s.reqLv;
+        const isSelected = gameState.selectedSeedId === s.id;
+        html += `
+          <div class="shop-item">
+            <div>
+              ${s.icon} <strong>${s.name}</strong> ${locked ? `<span style="color:#d84315; font-size:0.75rem;">(ปลดล็อก Lv.${s.reqLv})</span>` : ''}
+              <br><small style="color:#666;">ขายพื้นฐาน ${s.baseSell} บ. | โต ${s.growTime} วิ | +${s.exp} EXP</small>
+            </div>
+            <button class="btn ${isSelected ? 'btn-primary' : ''}" style="width:auto; padding:5px 10px;" 
+              ${locked ? 'disabled' : ''} onclick="selectSeedToPlant('${s.id}')">
+              ${isSelected ? '✓ เลือกอยู่' : `เลือก (${s.cost} บ.)`}
+            </button>
+          </div>
+        `;
+      });
+      shopEl.innerHTML = html;
+    } else {
+      // แท็บอุปกรณ์ตัวละครสุดแพง
+      shopEl.innerHTML = EQUIPMENTS.map(eq => {
+        const owned = hasEquip(eq.id);
+        return `
+          <div class="shop-item">
+            <div>
+              ${eq.icon} <strong>${eq.name}</strong>
+              <br><small style="color:#555;">${eq.desc}</small>
+            </div>
+            <button class="btn ${owned ? 'btn-primary' : 'btn-warning'}" style="width:auto; padding:6px 10px;" 
+              ${owned ? 'disabled' : ''} onclick="buyEquipment('${eq.id}')">
+              ${owned ? '✓ มีแล้ว' : `${eq.cost.toLocaleString()} บ.`}
+            </button>
+          </div>
+        `;
+      }).join("");
+    }
   }
 
   function renderInventory() {
     const invEl = document.getElementById("inventory-list");
     if (gameState.inventory.length === 0) {
-      invEl.innerHTML = `<div style="color:#888; font-size:0.85rem;">ยังไม่มีผลผลิตในตะกร้า (เก็บเกี่ยวผักมาก่อน)</div>`;
+      invEl.innerHTML = `<div style="color:#888; font-size:0.85rem;">ยังไม่มีผลผลิตหรือของป่าในตะกร้า</div>`;
       return;
     }
     invEl.innerHTML = gameState.inventory.map(item => `
