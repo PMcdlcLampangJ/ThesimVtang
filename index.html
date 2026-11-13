@@ -26,13 +26,13 @@
       z-index: 100; padding: 14px; overflow-y: auto;
     }
     .login-box {
-      background: rgba(255, 255, 255, 0.96); padding: 20px 24px 24px;
+      background: rgba(255, 255, 255, 0.97); padding: 20px 24px 24px;
       border-radius: 20px; max-width: 500px; width: 100%;
       box-shadow: 0 14px 35px rgba(0,0,0,0.3); text-align: center;
       border: 4px solid #fbc02d; margin: auto;
     }
     .game-title {
-      margin: 4px 0 2px; font-size: 1.75rem; font-weight: 900;
+      margin: 4px 0 2px; font-size: 1.7rem; font-weight: 900;
       color: #1b5e20; text-shadow: 2px 2px 0px #fff59d;
       line-height: 1.2;
     }
@@ -44,9 +44,9 @@
 
     /* ฉากประกอบหน้าแรก (SVG Scene) */
     .hero-scene {
-      width: 100%; max-height: 185px; border-radius: 14px;
+      width: 100%; max-height: 175px; border-radius: 14px;
       overflow: hidden; border: 3px solid #8bc34a;
-      margin-bottom: 12px; background: #b3e5fc;
+      margin-bottom: 14px; background: #b3e5fc;
       box-shadow: inset 0 0 12px rgba(0,0,0,0.1);
     }
     @keyframes bounceFunny {
@@ -60,15 +60,30 @@
     .funny-hero { animation: bounceFunny 1.8s infinite ease-in-out; transform-origin: center bottom; }
     .crowd-anim { animation: cheerCrowd 1.2s infinite ease-in-out; }
 
-    .gender-select { display: flex; gap: 10px; margin: 10px 0 14px; }
+    /* แท็บสลับ สร้างใหม่ / โหลดเซฟเดิม */
+    .auth-tabs {
+      display: flex; background: #eceff1; border-radius: 12px; padding: 4px;
+      margin-bottom: 14px; gap: 4px;
+    }
+    .auth-tab {
+      flex: 1; padding: 10px 8px; border: none; border-radius: 9px;
+      font-weight: bold; font-size: 0.95rem; cursor: pointer;
+      background: transparent; color: #546e7a; transition: 0.2s;
+    }
+    .auth-tab.active {
+      background: white; color: var(--primary);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+    }
+
+    .gender-select { display: flex; gap: 10px; margin: 8px 0 14px; }
     .gender-card {
       flex: 1; border: 2px solid #cfd8dc; border-radius: 12px; padding: 8px; cursor: pointer;
       transition: 0.2s; background: #fafafa;
     }
     .gender-card.active { border-color: var(--primary); background: #e8f5e9; transform: scale(1.03); }
-    .gender-card .avatar { font-size: 2.3rem; display: block; }
+    .gender-card .avatar { font-size: 2.2rem; display: block; }
     input[type="text"] {
-      width: 100%; padding: 9px 12px; margin: 4px 0 10px; border: 1.5px solid #b0bec5;
+      width: 100%; padding: 10px 12px; margin: 4px 0 10px; border: 1.5px solid #b0bec5;
       border-radius: 8px; font-size: 0.95rem;
     }
     .btn {
@@ -78,6 +93,8 @@
     .btn:disabled { opacity: 0.5; cursor: not-allowed; }
     .btn-primary { background: var(--primary); color: white; width: 100%; font-size: 1.05rem; }
     .btn-primary:hover:not(:disabled) { background: #1b5e20; }
+    .btn-load { background: #0277bd; color: white; width: 100%; font-size: 1.05rem; }
+    .btn-load:hover:not(:disabled) { background: #01579b; }
     .btn-secondary { background: #0277bd; color: white; }
     .btn-warning { background: var(--accent); color: white; }
 
@@ -190,47 +207,39 @@
     <!-- ฉากการ์ตูน SVG: เกษตรกรหญิงใส่แว่นท่าทางตลก + ชาวบ้านคึกคักด้านหลัง -->
     <div class="hero-scene">
       <svg viewBox="0 0 460 175" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-        <!-- ท้องฟ้า & เมฆ & พระอาทิตย์ยิ้ม -->
         <rect width="460" height="175" fill="#81d4fa"/>
         <circle cx="415" cy="34" r="22" fill="#fdd835"/>
         <circle cx="409" cy="31" r="2.5" fill="#333"/>
         <circle cx="421" cy="31" r="2.5" fill="#333"/>
         <path d="M409 39 Q415 45 421 39" stroke="#333" stroke-width="2" fill="none"/>
-        <!-- เมฆ -->
         <g fill="#ffffff" opacity="0.9">
           <circle cx="65" cy="32" r="14"/><circle cx="80" cy="28" r="18"/><circle cx="98" cy="33" r="13"/>
           <circle cx="290" cy="26" r="12"/><circle cx="305" cy="23" r="15"/><circle cx="320" cy="27" r="11"/>
         </g>
-        <!-- ภูเขาและทุ่งหญ้าด้านหลัง -->
         <path d="M0 125 Q90 65 190 125 T380 125 L460 100 L460 175 L0 175 Z" fill="#81c784"/>
         <rect x="0" y="122" width="460" height="53" fill="#66bb6a"/>
-        <!-- โรงนาสีแดงด้านซ้าย -->
         <rect x="18" y="82" width="56" height="44" fill="#e53935" rx="2"/>
         <polygon points="12,82 46,56 80,82" fill="#b71c1c"/>
         <rect x="36" y="98" width="20" height="28" fill="#ffe082"/>
         <line x1="36" y1="98" x2="56" y2="126" stroke="#8d6e63" stroke-width="2"/>
         <line x1="56" y1="98" x2="36" y2="126" stroke="#8d6e63" stroke-width="2"/>
 
-        <!-- กลุ่มชาวบ้านสุดคึกคักด้านหลัง (ซ้ายและขวา) -->
         <g class="crowd-anim">
-          <!-- ชาวบ้านคนที่ 1 (ซ้าย ชูมือเฮ) -->
           <circle cx="112" cy="96" r="13" fill="#ffcc80"/>
-          <path d="M98 92 Q112 76 126 92 Z" fill="#ffb300"/> <!-- หมวกฟาง -->
+          <path d="M98 92 Q112 76 126 92 Z" fill="#ffb300"/>
           <rect x="101" y="109" width="22" height="24" rx="5" fill="#1e88e5"/>
           <path d="M101 112 L88 94" stroke="#ffcc80" stroke-width="5" stroke-linecap="round"/>
           <path d="M123 112 L134 95" stroke="#ffcc80" stroke-width="5" stroke-linecap="round"/>
           <circle cx="108" cy="95" r="1.8" fill="#333"/><circle cx="116" cy="95" r="1.8" fill="#333"/>
           <path d="M108 101 Q112 106 116 101" stroke="#d84315" stroke-width="2" fill="none"/>
 
-          <!-- ชาวบ้านคนที่ 2 (ซ้ายกลาง ถือผักกาด) -->
           <circle cx="152" cy="100" r="12" fill="#ffe0b2"/>
-          <circle cx="152" cy="87" r="7" fill="#4e342e"/> <!-- มวยผม -->
+          <circle cx="152" cy="87" r="7" fill="#4e342e"/>
           <rect x="142" y="112" width="20" height="22" rx="5" fill="#ec407a"/>
-          <circle cx="137" cy="106" r="8" fill="#7cb342"/> <!-- ผักในมือ -->
+          <circle cx="137" cy="106" r="8" fill="#7cb342"/>
           <circle cx="149" cy="99" r="1.8" fill="#333"/><circle cx="156" cy="99" r="1.8" fill="#333"/>
           <circle cx="152" cy="105" r="3" fill="#e53935"/>
 
-          <!-- ชาวบ้านคนที่ 3 (ขวากลาง ถือป้ายเงิน ฿) -->
           <circle cx="312" cy="99" r="13" fill="#ffcc80"/>
           <path d="M298 95 Q312 80 326 95 Z" fill="#8d6e63"/>
           <rect x="301" y="112" width="22" height="23" rx="5" fill="#fb8c00"/>
@@ -240,7 +249,6 @@
           <circle cx="308" cy="98" r="1.8" fill="#333"/><circle cx="316" cy="98" r="1.8" fill="#333"/>
           <path d="M308 104 Q312 109 316 104" stroke="#333" stroke-width="2" fill="none"/>
 
-          <!-- ชาวบ้านคนที่ 4 (ขวาสุด กระโดดดีใจ) -->
           <circle cx="358" cy="93" r="12" fill="#ffe0b2"/>
           <rect x="348" y="105" width="20" height="22" rx="5" fill="#8e24aa"/>
           <path d="M348 108 L338 92" stroke="#ffe0b2" stroke-width="4.5" stroke-linecap="round"/>
@@ -249,7 +257,6 @@
           <path d="M354 98 Q358 104 362 98 Z" fill="#e53935"/>
         </g>
 
-        <!-- แปลงผักด้านหน้า -->
         <rect x="20" y="142" width="420" height="33" rx="8" fill="#6d4c41"/>
         <text x="55" y="162" font-size="20">🥬</text>
         <text x="105" y="162" font-size="20">🥕</text>
@@ -258,59 +265,40 @@
         <text x="345" y="162" font-size="20">🍓</text>
         <text x="395" y="162" font-size="20">🍈</text>
 
-        <!-- ตัวเอกตรงกลาง: เกษตรกรหญิงใส่แว่นตาโต ท่าทางตลกขี้เล่น -->
         <g class="funny-hero">
-          <!-- ผมแกละ 2 ข้างกางออกตลกๆ -->
           <path d="M196 68 Q174 52 178 82 Q188 78 198 76 Z" fill="#3e2723"/>
           <path d="M264 68 Q286 52 282 82 Q272 78 262 76 Z" fill="#3e2723"/>
           <circle cx="195" cy="67" r="4" fill="#ff4081"/>
           <circle cx="265" cy="67" r="4" fill="#ff4081"/>
-
-          <!-- หมวกฟางใบใหญ่เอียงข้าง -->
           <ellipse cx="230" cy="48" rx="46" ry="12" fill="#fdd835" stroke="#f57f17" stroke-width="2" transform="rotate(-6 230 48)"/>
           <path d="M204 47 Q230 22 256 45 Z" fill="#ffee58" stroke="#f57f17" stroke-width="2" transform="rotate(-6 230 48)"/>
           <path d="M204 46 L256 44" stroke="#e53935" stroke-width="4" transform="rotate(-6 230 48)"/>
-
-          <!-- ใบหน้า -->
           <circle cx="230" cy="76" r="28" fill="#ffe0b2" stroke="#e65100" stroke-width="1.5"/>
-          <!-- แก้มแดงป่อง -->
           <circle cx="211" cy="83" r="5.5" fill="#ff8a80" opacity="0.75"/>
           <circle cx="249" cy="83" r="5.5" fill="#ff8a80" opacity="0.75"/>
-
-          <!-- แว่นตาหนากลมโต (จุดเด่นตลก) -->
           <circle cx="218" cy="74" r="11" fill="#ffffff" stroke="#1a237e" stroke-width="3.5"/>
           <circle cx="242" cy="74" r="11" fill="#ffffff" stroke="#1a237e" stroke-width="3.5"/>
           <line x1="229" y1="74" x2="231" y2="74" stroke="#1a237e" stroke-width="3.5"/>
-          <!-- ลูกตาดำเหล่เข้าหากันแบบกวนๆ -->
           <circle cx="221" cy="74" r="4" fill="#000000"/>
           <circle cx="222" cy="72" r="1.5" fill="#ffffff"/>
           <circle cx="239" cy="74" r="4" fill="#000000"/>
           <circle cx="240" cy="72" r="1.5" fill="#ffffff"/>
-
-          <!-- ปากยิ้มกว้างเห็นฟัน + แลบลิ้นทะเล้น -->
           <path d="M218 89 Q230 103 242 89 Z" fill="#b71c1c"/>
           <rect x="225" y="89" width="10" height="3.5" fill="#ffffff"/>
           <path d="M227 96 Q232 104 236 96 Z" fill="#ff80ab"/>
-
-          <!-- ชุดเอี๊ยมเกษตรกร -->
-          <rect x="208" y="104" width="44" height="44" rx="10" fill="#ffca28"/> <!-- เสื้อลายสก็อตเหลือง -->
-          <rect x="213" y="114" width="34" height="36" rx="6" fill="#1565c0"/> <!-- เอี๊ยมยีนส์ -->
+          <rect x="208" y="104" width="44" height="44" rx="10" fill="#ffca28"/>
+          <rect x="213" y="114" width="34" height="36" rx="6" fill="#1565c0"/>
           <line x1="216" y1="104" x2="218" y2="116" stroke="#1565c0" stroke-width="5"/>
           <line x1="244" y1="104" x2="242" y2="116" stroke="#1565c0" stroke-width="5"/>
           <circle cx="218" cy="117" r="2.5" fill="#ffd54f"/>
           <circle cx="242" cy="117" r="2.5" fill="#ffd54f"/>
-
-          <!-- แขนซ้ายชูจอบ + แขนขวาชูสองนิ้ว -->
           <path d="M208 110 L186 92" stroke="#ffe0b2" stroke-width="7" stroke-linecap="round"/>
-          <!-- จอบในมือซ้าย -->
           <line x1="184" y1="138" x2="188" y2="62" stroke="#6d4c41" stroke-width="4.5" stroke-linecap="round"/>
           <path d="M174 64 L200 60 L196 72 L176 74 Z" fill="#90a4ae" stroke="#455a64" stroke-width="1.5"/>
-
           <path d="M252 110 L274 92" stroke="#ffe0b2" stroke-width="7" stroke-linecap="round"/>
           <text x="268" y="92" font-size="18">✌️</text>
         </g>
 
-        <!-- ป้ายข้อความบรรยากาศ -->
         <rect x="135" y="6" width="190" height="22" rx="11" fill="rgba(255,255,255,0.88)"/>
         <text x="230" y="21" font-size="11.5" font-weight="bold" text-anchor="middle" fill="#1b5e20">
           🎉 หมู่บ้านตางค์เฮฮา เปิดฟาร์มแล้วจ้า! 🎉
@@ -318,26 +306,47 @@
       </svg>
     </div>
 
-    <div style="text-align:left; font-weight:bold; font-size:0.85rem;">รหัสผู้เล่น (ID สำหรับเซฟและเล่นต่อ):</div>
-    <input type="text" id="input-id" placeholder="เช่น เบอร์โทร หรือ รหัสประจำตัว (ห้ามซ้ำ)" />
-
-    <div style="text-align:left; font-weight:bold; font-size:0.85rem;">ชื่อเกษตรกร:</div>
-    <input type="text" id="input-name" placeholder="กรอกชื่อที่แสดงในเกมและตารางอันดับ" />
-
-    <div style="text-align:left; font-weight:bold; font-size:0.85rem;">เลือกตัวละครเล่นในฟาร์ม:</div>
-    <div class="gender-select">
-      <div class="gender-card active" id="card-female" onclick="selectGender('หญิง')">
-        <span class="avatar">👩‍🌾👓</span>
-        <strong>เกษตรกรหญิง (สายฮา)</strong>
-      </div>
-      <div class="gender-card" id="card-male" onclick="selectGender('ชาย')">
-        <span class="avatar">👨‍🌾🤠</span>
-        <strong>เกษตรกรชาย (สายลุย)</strong>
-      </div>
+    <!-- แถบเลือกโหมด: สร้างตัวละครใหม่ vs โหลดเซฟเดิม -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tab-new" onclick="switchAuthTab('new')">✨ สร้างตัวละครใหม่</button>
+      <button class="auth-tab" id="tab-load" onclick="switchAuthTab('load')">📂 โหลดเซฟเดิมเล่นต่อ</button>
     </div>
 
-    <button class="btn btn-primary" id="btn-start" onclick="startOrLoadGame()">🚀 เข้าสู่หมู่บ้านตางค์ / โหลดเซฟเดิม</button>
-    <div id="login-status" style="margin-top:8px; font-size:0.85rem; color:#d84315;"></div>
+    <!-- ฟอร์ม 1: สร้างตัวละครใหม่ -->
+    <div id="panel-new">
+      <div style="text-align:left; font-weight:bold; font-size:0.85rem;">ตั้งรหัสผู้เล่น (ID สำหรับใช้โหลดเซฟภายหลัง):</div>
+      <input type="text" id="new-id" placeholder="เช่น เบอร์โทร หรือ รหัสประจำตัว (ห้ามซ้ำ)" />
+
+      <div style="text-align:left; font-weight:bold; font-size:0.85rem;">ชื่อเกษตรกร:</div>
+      <input type="text" id="new-name" placeholder="กรอกชื่อที่แสดงในเกมและตารางอันดับ" />
+
+      <div style="text-align:left; font-weight:bold; font-size:0.85rem;">เลือกตัวละคร:</div>
+      <div class="gender-select">
+        <div class="gender-card active" id="card-female" onclick="selectGender('หญิง')">
+          <span class="avatar">👩‍🌾👓</span>
+          <strong>เกษตรกรหญิง (สายฮา)</strong>
+        </div>
+        <div class="gender-card" id="card-male" onclick="selectGender('ชาย')">
+          <span class="avatar">👨‍🌾🤠</span>
+          <strong>เกษตรกรชาย (สายลุย)</strong>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" id="btn-create" onclick="createNewCharacter()">🌱 สร้างตัวละครและเริ่มฟาร์มใหม่</button>
+    </div>
+
+    <!-- ฟอร์ม 2: โหลดเซฟเดิม -->
+    <div id="panel-load" style="display:none;">
+      <div style="background:#e1f5fe; padding:12px; border-radius:10px; font-size:0.85rem; color:#01579b; margin-bottom:12px;">
+        💡 กรอก <strong>รหัสผู้เล่น (ID)</strong> ที่เคยลงทะเบียนไว้ เพื่อดึงข้อมูลเลเวล เงินทุน และแปลงผักกลับมาเล่นต่อ
+      </div>
+      <div style="text-align:left; font-weight:bold; font-size:0.85rem;">รหัสผู้เล่น (ID) ของคุณ:</div>
+      <input type="text" id="load-id" placeholder="กรอกรหัสผู้เล่นที่เคยบันทึกไว้..." />
+
+      <button class="btn btn-load" id="btn-load" onclick="loadExistingCharacter()">📂 ดึงข้อมูลเซฟเดิมเข้าฟาร์ม</button>
+    </div>
+
+    <div id="login-status" style="margin-top:10px; font-size:0.85rem; font-weight:bold; color:#d84315;"></div>
   </div>
 </div>
 
@@ -345,7 +354,7 @@
 <div id="game-container">
   <div class="top-banner">
     <span>🏡 เดอะซิมส์ ภาคพิสดาร ตางค์</span>
-    <span style="font-size:0.85rem; font-weight:normal;">ปลูกผัก • รดน้ำ • ใส่ปุ๋ย • ขายทำกำไร</span>
+    <span style="font-size:0.85rem; font-weight:normal;">รหัสผู้เล่น: <strong id="banner-id">-</strong></span>
   </div>
 
   <!-- HUD -->
@@ -399,7 +408,7 @@
 
     <!-- คอลัมน์ขวา: ร้านค้า, ตะกร้าขายผัก, สถิติอันดับ -->
     <div>
-      <!-- ตะกร้าผลผลิต (ต้องกดขายเอง) -->
+      <!-- ตะกร้าผลผลิต -->
       <div class="panel">
         <div style="display:flex; justify-content:space-between; align-items:center;">
           <h3 style="border:none; margin:0;">🛒 ตะกร้าผลผลิต (รอขาย)</h3>
@@ -457,7 +466,6 @@
     { zone: 2, title: "แปลงที่ 3 (ฟาร์มใหญ่ 9 ต้น)", reqLv: 4, cost: 450 }
   ];
 
-  // ตั้งค่าเริ่มต้นให้สอดคล้องกับตัวละครหญิงใส่แว่นหน้าปก
   let gameState = {
     playerId: "",
     playerName: "",
@@ -478,6 +486,15 @@
 
   let currentTool = "plant";
 
+  // สลับแท็บ สร้างใหม่ / โหลดเซฟเดิม
+  function switchAuthTab(mode) {
+    document.getElementById("login-status").innerText = "";
+    document.getElementById("tab-new").classList.toggle("active", mode === "new");
+    document.getElementById("tab-load").classList.toggle("active", mode === "load");
+    document.getElementById("panel-new").style.display = mode === "new" ? "block" : "none";
+    document.getElementById("panel-load").style.display = mode === "load" ? "block" : "none";
+  }
+
   function selectGender(g) {
     gameState.gender = g;
     document.getElementById("card-male").classList.toggle("active", g === "ชาย");
@@ -495,67 +512,109 @@
   function getRequiredExp() { return Math.pow(gameState.level, 2) * 150; }
   function getSkillEfficiency() { return 1 + (gameState.level - 1) * 0.12; }
 
-  async function startOrLoadGame() {
-    const id = document.getElementById("input-id").value.trim();
-    const name = document.getElementById("input-name").value.trim();
+  // 1. สร้างตัวละครใหม่ (เช็กก่อนว่ารหัสซ้ำไหม)
+  async function createNewCharacter() {
+    const id = document.getElementById("new-id").value.trim();
+    const name = document.getElementById("new-name").value.trim();
     const statusEl = document.getElementById("login-status");
+    const btn = document.getElementById("btn-create");
 
-    if (!id) {
-      statusEl.innerText = "⚠️ กรุณากรอกรหัสผู้เล่นก่อนเข้าหมู่บ้านครับ";
+    if (!id || !name) {
+      statusEl.style.color = "#d84315";
+      statusEl.innerText = "⚠️ กรุณากรอกทั้ง 'รหัสผู้เล่น' และ 'ชื่อเกษตรกร' ให้ครบครับ";
       return;
     }
 
-    document.getElementById("btn-start").disabled = true;
+    btn.disabled = true;
     statusEl.style.color = "#0277bd";
-    statusEl.innerText = "⏳ กำลังตรวจสอบทะเบียนบ้านในหมู่บ้านตางค์...";
+    statusEl.innerText = "⏳ กำลังตรวจสอบรหัสผู้เล่นในระบบ...";
 
     try {
       const res = await fetch(`${SCRIPT_URL}?action=load&playerId=${encodeURIComponent(id)}`);
       const data = await res.json();
 
       if (data.found) {
-        gameState.playerId = data.playerId;
-        gameState.playerName = name || data.playerName;
-        gameState.gender = data.gender || gameState.gender;
-        gameState.level = data.level;
-        gameState.exp = data.exp;
-        gameState.gold = data.gold;
-        gameState.score = data.score;
-        gameState.totalHarvested = data.totalHarvested;
-        gameState.totalEarned = data.totalEarned;
-
-        if (data.saveData) {
-          gameState.stamina = data.saveData.stamina ?? getMaxStamina();
-          gameState.fertilizer = data.saveData.fertilizer ?? 0;
-          gameState.unlockedZones = data.saveData.unlockedZones ?? [true, false, false];
-          gameState.cells = data.saveData.cells ?? Array(27).fill(null);
-          gameState.inventory = data.saveData.inventory ?? [];
-        }
-        showToast(`ยินดีต้อนรับกลับฟาร์ม คุณ${gameState.playerName}!`);
-      } else {
-        if (!name) {
-          statusEl.style.color = "#d84315";
-          statusEl.innerText = "⚠️ ไม่พบเซฟเดิม กรุณากรอก 'ชื่อเกษตรกร' เพื่อสร้างตัวละครใหม่ครับ";
-          document.getElementById("btn-start").disabled = false;
-          return;
-        }
-        gameState.playerId = id;
-        gameState.playerName = name;
-        gameState.stamina = getMaxStamina();
-        showToast(`สร้างตัวละครใหม่สำเร็จ! เริ่มต้นด้วยทุน 60 บาท`);
-        saveToCloud(true);
+        statusEl.style.color = "#d84315";
+        statusEl.innerText = `❌ รหัส "${id}" มีตัวละครชื่อ "${data.playerName}" อยู่แล้ว! กรุณากดแท็บ 'โหลดเซฟเดิมเล่นต่อ' หรือตั้งรหัสใหม่`;
+        btn.disabled = false;
+        return;
       }
 
-      document.getElementById("login-screen").style.display = "none";
-      document.getElementById("game-container").style.display = "block";
-      initGameLoop();
-      renderAll();
-      loadLeaderboard();
+      gameState.playerId = id;
+      gameState.playerName = name;
+      gameState.stamina = getMaxStamina();
+
+      enterGameScreen();
+      showToast(`สร้างตัวละคร "${name}" สำเร็จ! เริ่มต้นด้วยทุน 60 บาท`);
+      saveToCloud(true);
     } catch (err) {
       statusEl.style.color = "#d84315";
-      statusEl.innerText = "❌ เชื่อมต่อฐานข้อมูลไม่สำเร็จ กรุณาลองใหม่อีกครั้ง";
-      document.getElementById("btn-start").disabled = false;
+      statusEl.innerText = "❌ เชื่อมต่อฐานข้อมูลไม่สำเร็จ กรุณาตรวจสอบอินเทอร์เน็ตหรือการ Deploy";
+      btn.disabled = false;
     }
+  }
+
+  // 2. โหลดเซฟเดิมเล่นต่อ
+  async function loadExistingCharacter() {
+    const id = document.getElementById("load-id").value.trim();
+    const statusEl = document.getElementById("login-status");
+    const btn = document.getElementById("btn-load");
+
+    if (!id) {
+      statusEl.style.color = "#d84315";
+      statusEl.innerText = "⚠️ กรุณากรอกรหัสผู้เล่น (ID) ที่ต้องการโหลดครับ";
+      return;
+    }
+
+    btn.disabled = true;
+    statusEl.style.color = "#0277bd";
+    statusEl.innerText = "⏳ กำลังค้นหาเซฟของคุณในหมู่บ้านตางค์...";
+
+    try {
+      const res = await fetch(`${SCRIPT_URL}?action=load&playerId=${encodeURIComponent(id)}`);
+      const data = await res.json();
+
+      if (!data.found) {
+        statusEl.style.color = "#d84315";
+        statusEl.innerText = `❌ ไม่พบข้อมูลของรหัส "${id}" กรุณาตรวจสอบตัวเลข หรือสร้างตัวละครใหม่`;
+        btn.disabled = false;
+        return;
+      }
+
+      gameState.playerId = data.playerId;
+      gameState.playerName = data.playerName;
+      gameState.gender = data.gender || "หญิง";
+      gameState.level = data.level;
+      gameState.exp = data.exp;
+      gameState.gold = data.gold;
+      gameState.score = data.score;
+      gameState.totalHarvested = data.totalHarvested;
+      gameState.totalEarned = data.totalEarned;
+
+      if (data.saveData) {
+        gameState.stamina = data.saveData.stamina ?? getMaxStamina();
+        gameState.fertilizer = data.saveData.fertilizer ?? 0;
+        gameState.unlockedZones = data.saveData.unlockedZones ?? [true, false, false];
+        gameState.cells = data.saveData.cells ?? Array(27).fill(null);
+        gameState.inventory = data.saveData.inventory ?? [];
+      }
+
+      enterGameScreen();
+      showToast(`🎉 โหลดเซฟสำเร็จ! ยินดีต้อนรับกลับ คุณ${gameState.playerName}`);
+    } catch (err) {
+      statusEl.style.color = "#d84315";
+      statusEl.innerText = "❌ โหลดข้อมูลไม่สำเร็จ (ตรวจสอบว่า Deploy Apps Script เป็น New version แล้ว)";
+      btn.disabled = false;
+    }
+  }
+
+  function enterGameScreen() {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("game-container").style.display = "block";
+    document.getElementById("banner-id").innerText = gameState.playerId;
+    initGameLoop();
+    renderAll();
+    loadLeaderboard();
   }
 
   function setTool(tool) {
