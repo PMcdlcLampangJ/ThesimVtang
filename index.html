@@ -325,6 +325,10 @@
       border-color: #29b6f6;
       box-shadow: inset 0 0 12px rgba(41, 182, 246, 0.45), 0 2px 0 #3e2723;
     }
+    .cell.weedy {
+      border-color: #ff5252;
+      box-shadow: inset 0 0 12px rgba(255, 82, 82, 0.55), 0 2px 0 #b71c1c;
+    }
     .cell.ready {
       background-color: #5d4037;
       border-color: #ffd54f;
@@ -353,6 +357,14 @@
       color: #fff; font-weight: bold;
       font-size: 0.65rem; padding: 2px 6px; border-radius: 8px;
       box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    }
+    .weed-tag {
+      position: absolute; top: 4px; left: 4px;
+      background: linear-gradient(135deg, #e53935, #b71c1c);
+      color: #fff; font-weight: bold;
+      font-size: 0.65rem; padding: 2px 6px; border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.4);
+      animation: sparklePulse 0.9s infinite ease-in-out;
     }
     .cell .crop-icon {
       font-size: 1.95rem;
@@ -421,6 +433,19 @@
       box-shadow: 0 6px 20px rgba(0,0,0,0.28); border-left: 4px solid #fbc02d;
     }
     .toast.show { opacity: 1; transform: translateY(0); }
+
+    /* กล่องยืนยันการพักผ่อน (Custom Modal แทน confirm() เพื่อความสวยงาม) */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.55);
+      display: none; align-items: center; justify-content: center;
+      z-index: 300; padding: 16px;
+    }
+    .modal-card {
+      background: white; border-radius: 18px; max-width: 400px; width: 100%;
+      padding: 20px; text-align: center; border: 4px solid #ff8f00;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
   </style>
 </head>
 <body>
@@ -713,7 +738,7 @@
       <div class="badge">🏆 คะแนน: <span id="hud-score">0</span></div>
       <div class="badge">🧺 เก็บเกี่ยว: <span id="hud-harvested">0</span></div>
       <button class="btn btn-forest" onclick="forageForest()" id="btn-forage">🌲 หาของป่า (-12 ⚡)</button>
-      <button class="btn btn-warning" onclick="restPlayer()">💤 พักผ่อน (จ่าย 100 บ. / +20 ⚡)</button>
+      <button class="btn btn-warning" onclick="openRestModal()" id="btn-rest">💤 พักผ่อน (100 บ. / +20 ⚡)</button>
       <button class="btn btn-secondary" id="btn-save" onclick="saveToCloud()">☁️ บันทึกเซฟ</button>
     </div>
   </div>
@@ -728,7 +753,10 @@
             🌱 ปลูกเมล็ด (-<span id="cost-plant-stam">1</span> ⚡)<br><small id="selected-seed-label">ผักบุ้งจีน (10 บ.)</small>
           </button>
           <button class="tool-btn" id="tool-water" onclick="setTool('water')">
-            💧 รดน้ำ (-2 ⚡)<br><small>ดินชุ่มโตเต็มสปีด</small>
+            💧 รดน้ำ (-2 ⚡)<br><small>ดินแห้งไว ต้องหมั่นรด</small>
+          </button>
+          <button class="tool-btn" id="tool-weed" onclick="setTool('weed')">
+            ✂️ ถอนหญ้า/แมลง (-2 ⚡)<br><small>กำจัดวัชพืชหยุดโต</small>
           </button>
           <button class="tool-btn" id="tool-fert" onclick="setTool('fert')">
             🧪 ใส่ปุ๋ย (-3 ⚡)<br><small>มีปุ๋ย: <span id="fert-count">1</span> ถุง</small>
@@ -759,7 +787,7 @@
       <div class="panel">
         <h3>🏪 ตลาดหมู่บ้านตางค์</h3>
         <div class="shop-tabs">
-          <button class="shop-tab-btn active" id="stab-seeds" onclick="switchShopTab('seeds')">🌱 เมล็ดพันธุ์ 9 ชนิด & ปุ๋ย</button>
+          <button class="shop-tab-btn active" id="stab-seeds" onclick="switchShopTab('seeds')">🌱 เมล็ดพันธุ์ 12 ชนิด & ปุ๋ย</button>
           <button class="shop-tab-btn" id="stab-equips" onclick="switchShopTab('equips')">🎒 อุปกรณ์แรร์ (6 ชิ้น)</button>
         </div>
         <div class="shop-scroll" id="shop-list"></div>
@@ -789,44 +817,65 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- กล่องยืนยันการพักผ่อน -->
+<div class="modal-overlay" id="rest-modal">
+  <div class="modal-card">
+    <div style="font-size:2.4rem; margin-bottom:6px;">💤💸</div>
+    <h3 style="margin:0 0 8px; color:#e65100;">ยืนยันการพักผ่อน</h3>
+    <p style="font-size:0.92rem; line-height:1.5; margin:0; color:#37474f;">
+      ⚠️ ระบบจะหักเงิน <strong>100 บาท</strong> เพื่อฟื้นฟูพลังงาน <strong>+20 ⚡</strong><br>
+      <span style="color:#d84315; font-size:0.84rem;">(ติดคูลดาวน์พักผ่อน 60 วินาทีหลังจากใช้งาน)</span><br>
+      ต้องการดำเนินการต่อหรือไม่?
+    </p>
+    <div class="modal-actions">
+      <button class="btn" style="flex:1; background:#cfd8dc; color:#263238;" onclick="closeRestModal()">ยกเลิก</button>
+      <button class="btn btn-warning" style="flex:1;" onclick="confirmRestPlayer()">✅ ยืนยันจ่าย 100 บ.</button>
+    </div>
+  </div>
+</div>
+
 <script>
   const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxy5pVYAz0Fj9A56j5vcWwkNVgc9oWnDOk2jeLS03WJKs_PYJaSWabJuzx8GSTvHQNy/exec";
 
-  // 1. ผัก 9 ชนิด โตยากขึ้นเล็กน้อยและกระจายเลเวลปลดล็อก
+  // 1. ผัก 12 ชนิด โตยากขึ้นและกระจายเลเวลปลดล็อกถึง Lv.7
   const SEEDS = [
-    { id: 'morning_glory', name: 'ผักบุ้งจีน', icon: '🥬', cost: 10, baseSell: 20, growTime: 55, exp: 14, reqLv: 1 },
-    { id: 'bok_choy', name: 'กวางตุ้งไต้หวัน', icon: '🥗', cost: 18, baseSell: 36, growTime: 75, exp: 22, reqLv: 1 },
-    { id: 'kale', name: 'คะน้าฮ่องกง', icon: '🥦', cost: 30, baseSell: 62, growTime: 105, exp: 34, reqLv: 2 },
-    { id: 'tomato', name: 'มะเขือเทศราชินี', icon: '🍅', cost: 48, baseSell: 102, growTime: 135, exp: 52, reqLv: 2 },
-    { id: 'chili', name: 'พริกจินดา', icon: '🌶️', cost: 70, baseSell: 152, growTime: 170, exp: 76, reqLv: 3 },
-    { id: 'corn', name: 'ข้าวโพดหวาน', icon: '🌽', cost: 100, baseSell: 220, growTime: 210, exp: 110, reqLv: 3 },
-    { id: 'strawberry', name: 'สตรอว์เบอร์รี', icon: '🍓', cost: 145, baseSell: 325, growTime: 260, exp: 160, reqLv: 4 },
-    { id: 'pumpkin', name: 'ฟักทองยักษ์', icon: '🎃', cost: 210, baseSell: 480, growTime: 320, exp: 235, reqLv: 5 },
-    { id: 'melon', name: 'เมล่อนญี่ปุ่น', icon: '🍈', cost: 300, baseSell: 700, growTime: 390, exp: 340, reqLv: 6 }
+    { id: 'morning_glory', name: 'ผักบุ้งจีน', icon: '🥬', cost: 10, baseSell: 20, growTime: 60, exp: 14, reqLv: 1 },
+    { id: 'bok_choy', name: 'กวางตุ้งไต้หวัน', icon: '🥗', cost: 18, baseSell: 36, growTime: 80, exp: 22, reqLv: 1 },
+    { id: 'carrot', name: 'แครอทเบบี้', icon: '🥕', cost: 28, baseSell: 58, growTime: 100, exp: 32, reqLv: 2 },
+    { id: 'kale', name: 'คะน้าฮ่องกง', icon: '🥦', cost: 40, baseSell: 84, growTime: 120, exp: 44, reqLv: 2 },
+    { id: 'tomato', name: 'มะเขือเทศราชินี', icon: '🍅', cost: 58, baseSell: 122, growTime: 145, exp: 60, reqLv: 3 },
+    { id: 'chili', name: 'พริกจินดา', icon: '🌶️', cost: 80, baseSell: 170, growTime: 175, exp: 82, reqLv: 3 },
+    { id: 'corn', name: 'ข้าวโพดหวาน', icon: '🌽', cost: 110, baseSell: 238, growTime: 210, exp: 112, reqLv: 4 },
+    { id: 'strawberry', name: 'สตรอว์เบอร์รี', icon: '🍓', cost: 150, baseSell: 330, growTime: 255, exp: 155, reqLv: 4 },
+    { id: 'pumpkin', name: 'ฟักทองยักษ์', icon: '🎃', cost: 210, baseSell: 475, growTime: 310, exp: 220, reqLv: 5 },
+    { id: 'kyoho_grape', name: 'องุ่นเคียวโฮ', icon: '🍇', cost: 280, baseSell: 645, growTime: 365, exp: 300, reqLv: 5 },
+    { id: 'melon', name: 'เมล่อนญี่ปุ่น', icon: '🍈', cost: 360, baseSell: 840, growTime: 420, exp: 400, reqLv: 6 },
+    { id: 'durian', name: 'ทุเรียนหมอนทอง', icon: '🥭', cost: 480, baseSell: 1150, growTime: 490, exp: 540, reqLv: 6 },
+    { id: 'golden_reishi', name: 'เห็ดหลินจือทองคำ', icon: '🍄‍🟫', cost: 650, baseSell: 1600, growTime: 580, exp: 750, reqLv: 7 }
   ];
 
-  // 2. รายการของป่า 10 ชนิด ตั้งแต่ทั่วไปจนถึงแรร์ไอเทม
+  // 2. รายการของป่า 10 ชนิด ปรับน้ำหนักให้ของหายากออกยากขึ้นมาก
   const WILD_ITEMS = [
-    { name: 'ผักหวานป่า', icon: '🌿', price: 22, weight: 25 },
-    { name: 'หน่อไม้ไผ่ตง', icon: '🎍', price: 32, weight: 20 },
-    { name: 'กล้วยป่า', icon: '🍌', price: 42, weight: 16 },
-    { name: 'เห็ดโคนธรรมชาติ', icon: '🍄', price: 58, weight: 13 },
-    { name: 'สมุนไพรว่านชักมดลูก', icon: '🌱', price: 78, weight: 9 },
-    { name: 'รังผึ้งป่า', icon: '🐝', price: 105, weight: 6 },
-    { name: 'น้ำผึ้งเดือนห้า', icon: '🍯', price: 140, weight: 4.5 },
-    { name: 'เห็ดหลินจือแดง', icon: '🍄‍🟫', price: 190, weight: 3 },
-    { name: 'โสมป่าพันปี', icon: '🫚', price: 260, weight: 2 },
-    { name: 'เห็ดทรัฟเฟิลทองคำ', icon: '🥔✨', price: 380, weight: 1.5 }
+    { name: 'ผักหวานป่า', icon: '🌿', price: 22, weight: 32 },
+    { name: 'หน่อไม้ไผ่ตง', icon: '🎍', price: 32, weight: 25 },
+    { name: 'กล้วยป่า', icon: '🍌', price: 42, weight: 18 },
+    { name: 'เห็ดโคนธรรมชาติ', icon: '🍄', price: 58, weight: 11 },
+    { name: 'สมุนไพรว่านชักมดลูก', icon: '🌱', price: 78, weight: 6.5 },
+    { name: 'รังผึ้งป่า', icon: '🐝', price: 105, weight: 3.5 },
+    { name: 'น้ำผึ้งเดือนห้า', icon: '🍯', price: 140, weight: 2.0 },
+    { name: 'เห็ดหลินจือแดง', icon: '🍄‍🟫', price: 190, weight: 1.1 },
+    { name: 'โสมป่าพันปี', icon: '🫚', price: 260, weight: 0.6 },
+    { name: 'เห็ดทรัฟเฟิลทองคำ', icon: '🥔✨', price: 380, weight: 0.3 }
   ];
 
-  // 3. อุปกรณ์สวมใส่ 6 ชิ้น (ซื้อได้หรือดรอปจากป่า)
+  // 3. อุปกรณ์สวมใส่ 6 ชิ้น (ไม่ทับซ้อนหากมีซ้ำ)
   const EQUIPMENTS = [
     { id: 'gloves', name: 'ถุงมือเกษตรกรโปร', icon: '🧤', cost: 450, desc: 'ลดพลังงานเก็บเกี่ยว -1 ⚡' },
     { id: 'can', name: 'บัวรดน้ำทองคำ', icon: '🚿', cost: 850, desc: 'รดน้ำ & ใส่ปุ๋ยแรงขึ้น +25%' },
-    { id: 'boots', name: 'รองเท้าเดินป่าสายฟ้า', icon: '🥾', cost: 1200, desc: 'หาของป่าใช้แค่ 9 ⚡ (ลดจาก 12) & เพิ่มโอกาสของแรร์' },
+    { id: 'boots', name: 'รองเท้าเดินป่าสายฟ้า', icon: '🥾', cost: 1200, desc: 'หาของป่าใช้แค่ 9 ⚡ & ลดโอกาสกลับมือเปล่า' },
     { id: 'hat', name: 'หมวกฟางกันแดดซูเปอร์', icon: '👒', cost: 1600, desc: 'เพิ่มอัตราฟื้นฟูพลังงานอัตโนมัติ +0.5 ⚡/นาที' },
     { id: 'basket', name: 'ตะกร้าสานวิเศษ', icon: '🧺', cost: 2200, desc: 'ขายผลผลิตและของป่าได้ราคาเพิ่มขึ้น +15%' },
-    { id: 'amulet', name: 'ตะกรุดเรียกทรัพย์ป่าลึก', icon: '🧿', cost: 3500, desc: 'เพิ่มโอกาสดรอปอุปกรณ์แรร์จากป่า 2 เท่า & เพิ่มผักพรีเมียม' }
+    { id: 'amulet', name: 'ตะกรุดเรียกทรัพย์ป่าลึก', icon: '🧿', cost: 3500, desc: 'เพิ่มโอกาสดรอปอุปกรณ์แรร์ 2 เท่า & เพิ่มเกรดผักพรีเมียม' }
   ];
 
   const PLOT_UNLOCK_RULES = [
@@ -858,6 +907,7 @@
   let currentTool = "plant";
   let currentShopTab = "seeds";
   let loopStarted = false;
+  let restCooldown = 0; // คูลดาวน์การพักผ่อน (วินาที)
 
   function switchAuthTab(mode) {
     document.getElementById("login-status").innerText = "";
@@ -884,18 +934,25 @@
     return Array.isArray(gameState.equipments) && gameState.equipments.includes(eqId);
   }
 
+  function addUniqueEquip(eqId) {
+    if (!Array.isArray(gameState.equipments)) gameState.equipments = [];
+    if (gameState.equipments.includes(eqId)) return false;
+    gameState.equipments = Array.from(new Set([...gameState.equipments, eqId]));
+    return true;
+  }
+
   function getMaxStamina() { return 30 + (gameState.level - 1) * 10; }
   function getRequiredExp() { return Math.pow(gameState.level, 2) * 150; }
 
   function getSkillEfficiency() {
     let base = 1 + (gameState.level - 1) * 0.12;
-    if (hasEquip('can')) base += 0.25; // บัวรดน้ำทองคำ +25%
+    if (hasEquip('can')) base += 0.25; // บัวรดน้ำทองคำ +25% (ไม่ทับซ้อน)
     return base;
   }
 
-  // อัตราฟื้นฟูพลังงานต่อนาที: 1.0 + 0.1 ต่อเลเวล (+0.5 ถ้ามีหมวกฟางกันแดดซูเปอร์)
+  // อัตราฟื้นฟูพลังงานต่อนาที: 1 ต่อ 30 วินาที (2.0/นาที) + 0.1 ต่อเลเวล (+0.5 ถ้ามีหมวกฟางซูเปอร์)
   function getRegenPerMinute() {
-    let rate = 1.0 + (gameState.level - 1) * 0.1;
+    let rate = 2.0 + (gameState.level - 1) * 0.1;
     if (hasEquip('hat')) rate += 0.5;
     return rate;
   }
@@ -987,7 +1044,8 @@
         gameState.unlockedZones = data.saveData.unlockedZones ?? [true, false, false];
         gameState.cells = data.saveData.cells ?? Array(27).fill(null);
         gameState.inventory = data.saveData.inventory ?? [];
-        gameState.equipments = data.saveData.equipments ?? [];
+        // กรองให้เหลือเฉพาะอุปกรณ์ที่ไม่ซ้ำกันเสมอ
+        gameState.equipments = Array.from(new Set(data.saveData.equipments ?? []));
       }
 
       enterGameScreen();
@@ -1041,36 +1099,52 @@
   function buyEquipment(eqId) {
     const eq = EQUIPMENTS.find(e => e.id === eqId);
     if (!eq) return;
-    if (hasEquip(eqId)) return showToast("คุณมีอุปกรณ์ชิ้นนี้อยู่แล้ว");
+    if (hasEquip(eqId)) return showToast("⚠️ คุณติดตั้งอุปกรณ์ชิ้นนี้อยู่แล้ว (ผลลัพธ์ไม่ทับซ้อน)");
     if (gameState.gold < eq.cost) return showToast(`เงินไม่พอ! ต้องการ ${eq.cost.toLocaleString()} บาท`);
 
     gameState.gold -= eq.cost;
-    gameState.equipments.push(eqId);
+    addUniqueEquip(eqId);
     showToast(`🎉 ซื้อ "${eq.name}" สำเร็จ! ติดตั้งความสามารถให้ตัวละครแล้ว`);
     renderAll();
     saveToCloud(true);
   }
 
-  // การพักผ่อน: คิดค่าใช้จ่าย 100 บาท และฟื้นฟูพลังงานได้เพียง 20 ⚡ เท่านั้น
-  function restPlayer() {
+  // การพักผ่อน: ตรวจสอบคูลดาวน์ 1 นาที + แสดงหน้าต่างแจ้งเตือนยืนยันการเสียเงิน 100 บาท
+  function openRestModal() {
     const maxStam = getMaxStamina();
+    if (restCooldown > 0) {
+      return showToast(`⏳ ยังพักผ่อนไม่ได้! ติดคูลดาวน์อีก ${restCooldown} วินาที`);
+    }
     if (gameState.stamina >= maxStam) {
       return showToast("⚡ พลังงานเต็มอยู่แล้ว ไม่จำเป็นต้องเสียเงินพักผ่อน!");
     }
     if (gameState.gold < 100) {
       return showToast("❌ เงินไม่พอค่าพักผ่อน (ต้องใช้ 100 บาท) รอพลังงานฟื้นฟูเองนะ!");
     }
+    document.getElementById("rest-modal").style.display = "flex";
+  }
+
+  function closeRestModal() {
+    document.getElementById("rest-modal").style.display = "none";
+  }
+
+  function confirmRestPlayer() {
+    closeRestModal();
+    const maxStam = getMaxStamina();
+    if (restCooldown > 0 || gameState.stamina >= maxStam || gameState.gold < 100) return;
 
     gameState.gold -= 100;
     const recover = 20;
     const beforeStam = gameState.stamina;
     gameState.stamina = Math.min(maxStam, gameState.stamina + recover);
     const actualGained = gameState.stamina - beforeStam;
-    showToast(`💸 จ่ายค่าพักผ่อน 100 บาท! ฟื้นฟูพลังงาน +${actualGained} ⚡`);
+
+    restCooldown = 60; // เริ่มนับถอยหลังคูลดาวน์ 1 นาที (60 วินาที)
+    showToast(`💸 เสียเงินค่าพักผ่อน 100 บาท! ฟื้นฟูพลังงาน +${actualGained} ⚡ (ติดคูลดาวน์ 60 วิ)`);
     renderAll();
   }
 
-  // หาของป่า: ใช้พลังงานพื้นฐาน 12 ⚡ (ลดเหลือ 9 ⚡ หากสวมรองเท้าเดินป่าสายฟ้า)
+  // หาของป่า: ยากขึ้น มีโอกาสกลับมือเปล่า และสุ่มของแรร์/อุปกรณ์ยากขึ้น
   function forageForest() {
     const stamCost = hasEquip('boots') ? 9 : 12;
     if (gameState.stamina < stamCost) {
@@ -1081,28 +1155,50 @@
     const gainedExp = 6 + Math.floor(gameState.level * 0.6);
     gameState.exp += gainedExp;
 
-    // โอกาสดรอปอุปกรณ์แรร์จากป่า (พื้นฐาน 4%, รองเท้า 7%, ตะกรุดเรียกทรัพย์ป่าลึกคูณ 2 เท่า)
-    let rareChance = hasEquip('boots') ? 0.07 : 0.04;
-    if (hasEquip('amulet')) rareChance *= 2;
-
-    const unownedEquips = EQUIPMENTS.filter(e => !hasEquip(e.id));
-
-    if (unownedEquips.length > 0 && Math.random() < rareChance) {
-      const foundEq = unownedEquips[Math.floor(Math.random() * unownedEquips.length)];
-      gameState.equipments.push(foundEq.id);
+    // 1. โอกาสกลับมือเปล่า (พื้นฐาน 35%, ลดเหลือ 20% เมื่อมีรองเท้าเดินป่า)
+    const emptyChance = hasEquip('boots') ? 0.20 : 0.35;
+    if (Math.random() < emptyChance) {
       checkLevelUp();
-      showToast(`🎁 โชคหล่นทับ! เดินป่าลึกเจอ "${foundEq.icon} ${foundEq.name}" ฟรี! (+${gainedExp} EXP)`);
+      showToast(`🍂 เดินป่าเหนื่อยฟรี! เจอแต่ใบไม้แห้ง ไม่ได้ของติดมือ (+${gainedExp} EXP)`);
       renderAll();
-      saveToCloud(true);
       return;
     }
 
-    // สุ่มของป่า 10 ชนิดตามน้ำหนัก (รองเท้าเดินป่า & ตะกรุดช่วยเพิ่มโอกาสของแรร์)
-    let bonusRarity = 0;
-    if (hasEquip('boots')) bonusRarity += 12;
-    if (hasEquip('amulet')) bonusRarity += 10;
+    // 2. โอกาสดรอปอุปกรณ์แรร์ในป่า (พื้นฐาน 1.5%, รองเท้า 3%, ตะกรุดคูณ 2 เท่า)
+    let rareChance = hasEquip('boots') ? 0.03 : 0.015;
+    if (hasEquip('amulet')) rareChance *= 2;
 
-    let roll = Math.max(0.5, Math.random() * 100 - bonusRarity);
+    if (Math.random() < rareChance) {
+      const randomEq = EQUIPMENTS[Math.floor(Math.random() * EQUIPMENTS.length)];
+      if (addUniqueEquip(randomEq.id)) {
+        checkLevelUp();
+        showToast(`🎁 โชคหล่นทับ! เดินป่าลึกเจอ "${randomEq.icon} ${randomEq.name}" ฟรี! (+${gainedExp} EXP)`);
+        renderAll();
+        saveToCloud(true);
+        return;
+      } else {
+        // หากสุ่มเจออุปกรณ์ซ้ำที่มีอยู่แล้ว -> เปลี่ยนเป็นของป่าหายากแทนไม่ให้ทับซ้อน
+        const fallbackWild = WILD_ITEMS[6]; // น้ำผึ้งเดือนห้า
+        gameState.inventory.push({
+          name: fallbackWild.name,
+          icon: fallbackWild.icon,
+          quality: 'wild',
+          qualityLabel: 'ของป่าแลกเปลี่ยน',
+          price: fallbackWild.price
+        });
+        checkLevelUp();
+        showToast(`🔄 เจออุปกรณ์ซ้ำกับที่มีอยู่แล้ว จึงนำมาแลกเป็น "${fallbackWild.icon} ${fallbackWild.name}" แทน! (+${gainedExp} EXP)`);
+        renderAll();
+        return;
+      }
+    }
+
+    // 3. สุ่มของป่า 10 ชนิดตามน้ำหนัก
+    let bonusRarity = 0;
+    if (hasEquip('boots')) bonusRarity += 4;
+    if (hasEquip('amulet')) bonusRarity += 4;
+
+    let roll = Math.max(0.1, Math.random() * 100 - bonusRarity);
     let chosen = WILD_ITEMS[0];
     let acc = 0;
     for (const item of WILD_ITEMS) {
@@ -1155,6 +1251,7 @@
         progress: 0,
         watered: false,
         fertilized: false,
+        hasWeed: false,
         careScore: 0
       };
       renderPlots();
@@ -1168,8 +1265,19 @@
       gameState.stamina -= 2;
       cell.watered = true;
       cell.careScore += 1 * getSkillEfficiency();
-      cell.progress = Math.min(100, cell.progress + (3 * getSkillEfficiency()));
+      cell.progress = Math.min(100, cell.progress + (2.5 * getSkillEfficiency()));
       showToast("💧 รดน้ำชุ่มฉ่ำ ผักโตเต็มสปีด!");
+      renderPlots();
+      updateHUD();
+    } else if (currentTool === "weed") {
+      if (!cell) return showToast("ไม่มีต้นผักในหลุมนี้");
+      if (!cell.hasWeed) return showToast("หลุมนี้ไม่มีวัชพืชหรือแมลงรบกวน");
+      if (gameState.stamina < 2) return showToast("พลังงานไม่พอ (ใช้ 2 ⚡)");
+
+      gameState.stamina -= 2;
+      cell.hasWeed = false;
+      cell.careScore += 0.8 * getSkillEfficiency();
+      showToast("✂️ ถอนหญ้าและไล่แมลงเรียบร้อย! ผักกลับมาเติบโตต่อแล้ว");
       renderPlots();
       updateHUD();
     } else if (currentTool === "fert") {
@@ -1182,7 +1290,7 @@
       gameState.fertilizer -= 1;
       gameState.stamina -= 3;
       cell.fertilized = true;
-      const boost = Math.min(60, Math.round(25 * getSkillEfficiency()));
+      const boost = Math.min(55, Math.round(22 * getSkillEfficiency()));
       cell.progress = Math.min(100, cell.progress + boost);
       cell.careScore += 2 * getSkillEfficiency();
       showToast(`🧪 ใส่ปุ๋ยสำเร็จ! เร่งโตทันที +${boost}%`);
@@ -1191,24 +1299,26 @@
     } else if (currentTool === "harvest") {
       if (!cell) return showToast("ไม่มีผักให้เก็บเกี่ยว");
       if (cell.progress < 100) return showToast("ผักยังไม่โตเต็มที่ รออีกนิด!");
+      if (cell.hasWeed) return showToast("✂️ มีวัชพืชคลุมต้นผักอยู่! กรุณาถอนหญ้าก่อนเก็บเกี่ยว");
       const harvCost = hasEquip('gloves') ? 1 : 2;
       if (gameState.stamina < harvCost) return showToast(`พลังงานไม่พอ (ใช้ ${harvCost} ⚡)`);
 
       gameState.stamina -= harvCost;
       const seed = SEEDS.find(s => s.id === cell.seedId);
 
-      // ตะกรุดเรียกทรัพย์ป่าลึก ช่วยเพิ่มคะแนนการดูแลให้ติดเกรดพรีเมียมง่ายขึ้น
+      // ตะกรุดเรียกทรัพย์ป่าลึก ช่วยเพิ่มคะแนนการดูแล (ไม่ทับซ้อน)
       const effectiveCare = cell.careScore + (hasEquip('amulet') ? 0.9 : 0);
 
       let quality = 1;
       let qualityLabel = "เกรดธรรมดา";
       let priceMultiplier = 1.0;
 
-      if (effectiveCare >= 3.2) {
+      // เกณฑ์คุณภาพที่ท้าทายขึ้น ต้องดูแลทั้งน้ำ ปุ๋ย และถอนหญ้า
+      if (effectiveCare >= 4.2) {
         quality = 3;
         qualityLabel = "พรีเมียมอินทรีย์";
-        priceMultiplier = 1.75;
-      } else if (effectiveCare >= 1.5) {
+        priceMultiplier = 1.8;
+      } else if (effectiveCare >= 2.0) {
         quality = 2;
         qualityLabel = "คัดเกรดพิเศษ";
         priceMultiplier = 1.35;
@@ -1255,48 +1365,64 @@
     gameState.score += Math.round(totalMoney * 0.5);
     gameState.inventory = [];
 
-    showToast(`💰 ขายสินค้า ${count} รายการ รับเงินสด +${totalMoney} บาท!${bonusText}`);
+    showToast(`💰 ขายสินค้า ${count} รายการ รับเงินสด +${totalMoney.toLocaleString()} บาท!${bonusText}`);
     renderAll();
     saveToCloud(true);
   }
 
-  // ใช้ Toast แจ้งเตือนแทน alert() ตามมาตรฐาน
   function checkLevelUp() {
     let req = getRequiredExp();
-    let leveledUp = false;
     while (gameState.exp >= req) {
       gameState.exp -= req;
       gameState.level += 1;
       gameState.stamina = getMaxStamina();
-      leveledUp = true;
+      showToast(`🎉 เลื่อนระดับเป็น เลเวล ${gameState.level}! พลังงานสูงสุด ${getMaxStamina()} ⚡`);
       req = getRequiredExp();
-    }
-    if (leveledUp) {
-      showToast(`🎉 เลเวลอัปเป็น Lv.${gameState.level}! พลังงานเต็ม ${getMaxStamina()} ⚡ (ฟื้นฟู ${getRegenPerMinute().toFixed(1)}/นาที)`);
     }
   }
 
-  // Loop ทำงานทุก 1 วินาที: ผักโต + ฟื้นฟูพลังงานทีละนิด
+  // Loop ทำงานทุก 1 วินาที: ผักโต (มีระบบดินแห้งไว & วัชพืช) + คูลดาวน์พักผ่อน + ฟื้นฟูพลังงาน
   function initGameLoop() {
     setInterval(() => {
-      // 1. การเติบโตของผัก
+      // 0. นับถอยหลังคูลดาวน์การพักผ่อน
+      if (restCooldown > 0) {
+        restCooldown -= 1;
+        updateHUD();
+      }
+
+      // 1. การเติบโตและความยากในการดูแลผัก
       let plotChanged = false;
       gameState.cells.forEach(cell => {
         if (cell && cell.progress < 100) {
           const seed = SEEDS.find(s => s.id === cell.seedId);
-          const speedFactor = cell.watered ? 1.0 : 0.35;
-          const step = (100 / seed.growTime) * speedFactor;
-          cell.progress = Math.min(100, cell.progress + step);
 
-          if (cell.watered && Math.random() < 0.06) {
-            cell.watered = false;
+          // โอกาสเกิดวัชพืช/แมลงศัตรูพืช (4% ต่อวินาที) หากยังไม่มี
+          if (!cell.hasWeed && cell.progress > 10 && Math.random() < 0.04) {
+            cell.hasWeed = true;
+            plotChanged = true;
           }
-          plotChanged = true;
+
+          if (cell.hasWeed) {
+            // หากมีวัชพืช ผักจะหยุดโตและลดคุณภาพดูแลลงทีละนิด
+            cell.careScore = Math.max(0, cell.careScore - 0.03);
+            plotChanged = true;
+          } else {
+            // หากดินแห้ง โตช้าเหลือแค่ 20%
+            const speedFactor = cell.watered ? 1.0 : 0.20;
+            const step = (100 / seed.growTime) * speedFactor;
+            cell.progress = Math.min(100, cell.progress + step);
+
+            // ดินแห้งไวขึ้น (โอกาส 14% ต่อวินาที)
+            if (cell.watered && Math.random() < 0.14) {
+              cell.watered = false;
+            }
+            plotChanged = true;
+          }
         }
       });
       if (plotChanged) renderPlots();
 
-      // 2. ฟื้นฟูพลังงานอัตโนมัติ
+      // 2. ฟื้นฟูพลังงานอัตโนมัติ (1 ต่อ 30 วิ = 2.0/นาที + 0.1 ต่อเลเวล)
       const maxStam = getMaxStamina();
       const ratePerMin = getRegenPerMinute();
       const ratePerSec = ratePerMin / 60;
@@ -1414,15 +1540,24 @@
     if (gameState.equipments && gameState.equipments.length > 0) {
       eqContainer.innerHTML = gameState.equipments.map(id => {
         const item = EQUIPMENTS.find(e => e.id === id);
-        return item ? `<span class="eq-chip" title="${item.desc}">${item.icon} ${item.name}</span>` : '';
+        return item ? `<span class="eq-chip">${item.icon} ${item.name}</span>` : '';
       }).join("");
     } else {
       eqContainer.innerHTML = `<span style="font-size:0.72rem; color:#888;">ยังไม่มีอุปกรณ์สวมใส่</span>`;
     }
 
-    // อัปเดตตัวเลขใช้พลังงานบนปุ่มตามอุปกรณ์
+    // อัปเดตตัวเลขใช้พลังงานบนปุ่มตามอุปกรณ์และคูลดาวน์พักผ่อน
     document.getElementById("btn-forage").innerText = `🌲 หาของป่า (-${hasEquip('boots') ? 9 : 12} ⚡)`;
     document.getElementById("cost-harv-stam").innerText = hasEquip('gloves') ? 1 : 2;
+
+    const restBtn = document.getElementById("btn-rest");
+    if (restCooldown > 0) {
+      restBtn.disabled = true;
+      restBtn.innerText = `⏳ พักผ่อน (รอ ${restCooldown} วิ)`;
+    } else {
+      restBtn.disabled = false;
+      restBtn.innerText = `💤 พักผ่อน (100 บ. / +20 ⚡)`;
+    }
 
     document.getElementById("hud-gold").innerText = gameState.gold.toLocaleString();
     document.getElementById("hud-score").innerText = gameState.score.toLocaleString();
@@ -1473,16 +1608,20 @@
             if (pct >= 100) {
               // ระยะที่ 4: โตเต็มวัยพร้อมเก็บเกี่ยวมีประกายวิบวับ
               cellEl.classList.add("ready");
+              if (cell.hasWeed) cellEl.classList.add("weedy");
               cellEl.innerHTML = `
-                <span class="sparkle-badge">✨</span>
+                ${cell.hasWeed ? '<span class="weed-tag">🐛 วัชพืช</span>' : '<span class="sparkle-badge">✨</span>'}
                 ${cell.fertilized ? '<span class="fert-tag">🧪 ปุ๋ย</span>' : ''}
                 <span class="crop-icon">${seed.icon}</span>
                 <span class="crop-name">${seed.name}</span>
-                <span class="crop-status" style="color:#fff59d; font-weight:bold;">🧺 พร้อมเก็บเกี่ยว!</span>
+                <span class="crop-status" style="color:${cell.hasWeed ? '#ffcdd2' : '#fff59d'}; font-weight:bold;">
+                  ${cell.hasWeed ? '✂️ ถอนหญ้าก่อนเก็บ!' : '🧺 พร้อมเก็บเกี่ยว!'}
+                </span>
               `;
             } else {
               // ระยะที่ 1-3 ตามเปอร์เซ็นต์การเติบโต
               if (cell.watered) cellEl.classList.add("watered");
+              if (cell.hasWeed) cellEl.classList.add("weedy");
               let stageIcon = '🫘';
               let stageText = 'เมล็ดพันธุ์';
               if (pct >= 65) {
@@ -1494,12 +1633,15 @@
               }
 
               cellEl.innerHTML = `
+                ${cell.hasWeed ? '<span class="weed-tag">🐛 วัชพืช!</span>' : ''}
                 ${cell.fertilized ? '<span class="fert-tag">🧪 ปุ๋ย</span>' : ''}
                 ${cell.watered ? '<span class="water-drop-badge">💧</span>' : ''}
                 <span class="crop-icon">${stageIcon}</span>
                 <span class="crop-name">${seed.name} (${pct}%)</span>
                 <div class="mini-progress"><div class="mini-progress-fill" style="width:${pct}%"></div></div>
-                <span class="crop-status">${cell.watered ? '💦 ชุ่มน้ำ' : `☀️ ${stageText}`}</span>
+                <span class="crop-status" style="color:${cell.hasWeed ? '#ffcdd2' : '#fff'};">
+                  ${cell.hasWeed ? '⛔ หยุดโต! รีบถอนหญ้า' : (cell.watered ? '💦 ชุ่มน้ำ' : `☀️ ดินแห้ง (โตช้า)`)}
+                </span>
               `;
             }
           }
@@ -1538,7 +1680,7 @@
       });
       shopEl.innerHTML = html;
     } else {
-      // แท็บอุปกรณ์ตัวละคร 6 ชิ้น
+      // แท็บอุปกรณ์ตัวละคร 6 ชิ้น (ไม่ทับซ้อนหากมีซ้ำ)
       shopEl.innerHTML = EQUIPMENTS.map(eq => {
         const owned = hasEquip(eq.id);
         return `
@@ -1549,7 +1691,7 @@
             </div>
             <button class="btn ${owned ? 'btn-primary' : 'btn-warning'}" style="width:auto; padding:6px 10px;"
               ${owned ? 'disabled' : ''} onclick="buyEquipment('${eq.id}')">
-              ${owned ? '✓ มีแล้ว' : `${eq.cost.toLocaleString()} บ.`}
+              ${owned ? '✓ ติดตั้งแล้ว' : `${eq.cost.toLocaleString()} บ.`}
             </button>
           </div>
         `;
